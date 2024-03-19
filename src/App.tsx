@@ -67,7 +67,7 @@ a{
 `;
 
 const App = () => {
-  const isDark = useRecoilValue(isDarkAtom)
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <ThemeProvider theme={isDark ? darktheme : lighttheme}>
       <GlobalStyle />
