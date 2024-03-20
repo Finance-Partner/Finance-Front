@@ -63,23 +63,29 @@ const Register = () => {
   }
   const onValid = (data: IRegisterForm) => {
     const { name, email, password1, password2, birthday } = getValues();
-    console.log(getValues());
-    // axios
-    //   .post("http://43.201.7.157:8080/login", null, {
-    //     params: {
-    //       email: email,
-    //       password: password1,
-    //     },
-    //     headers: {
-    //       Accept: "application/json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("Response:", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
+    if (password1 !== password2) {
+      //setError 사용코드
+      return;
+    }
+    const params = {
+      email: email,
+      password: password1,
+      name: name,
+      birthday: birthday,
+    };
+    axios
+      .post("http://43.201.7.157:8080/user", null, {
+        params: params,
+        headers: {
+          accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   const onError = (errors: Object) => {
     console.log("error has occured", errors);
