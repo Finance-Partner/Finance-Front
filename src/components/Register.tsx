@@ -52,7 +52,8 @@ const SDatePicker = styled(DatePicker)`
 const Register = () => {
   const navigate = useNavigate();
   const [date, setDate] = useState(new Date());
-  const { register, handleSubmit, getValues } = useForm<IRegisterForm>();
+  const { register, handleSubmit, getValues, setValue } =
+    useForm<IRegisterForm>();
   interface IRegisterForm {
     name: string;
     email: string;
@@ -60,25 +61,28 @@ const Register = () => {
     password2: string;
     birthday: string;
   }
-  const onValid = () => {
-    const url = "http://43.201.7.157:8080/login";
-    const { name, email, password1, password2 } = getValues();
-    axios
-      .post("http://43.201.7.157:8080/login", null, {
-        params: {
-          email: email,
-          password: password1,
-        },
-        headers: {
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        console.log("Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  const onValid = (data: IRegisterForm) => {
+    const { name, email, password1, password2, birthday } = getValues();
+    console.log(getValues());
+    // axios
+    //   .post("http://43.201.7.157:8080/login", null, {
+    //     params: {
+    //       email: email,
+    //       password: password1,
+    //     },
+    //     headers: {
+    //       Accept: "application/json",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log("Response:", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+  };
+  const onError = (errors: Object) => {
+    console.log("error has occured", errors);
   };
   return (
     <>
@@ -95,7 +99,7 @@ const Register = () => {
             </span>
           </p>
         </div>
-        <Form onSubmit={handleSubmit(onValid)}>
+        <Form onSubmit={handleSubmit(onValid, onError)}>
           <p>Name</p>
           <ContextInput {...register("name", { required: true })} />
           <p>Password</p>
@@ -114,11 +118,17 @@ const Register = () => {
           <SDatePicker
             {...register("birthday", { required: true })}
             selected={date}
-            onChange={(date: Date) => setDate(date)}
+            onChange={(date: Date) => {
+              setDate(date);
+              const formattedDate = `${date.getFullYear()}-${
+                date.getMonth() + 1
+              }-${date.getDate()}`;
+              setValue("birthday", formattedDate, { shouldValidate: true });
+            }}
             locale={ko}
             maxDate={new Date()}
           />
-          <SubmitBtn>Login</SubmitBtn>
+          <SubmitBtn>Register</SubmitBtn>
         </Form>
       </Container>
     </>
