@@ -1,7 +1,13 @@
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale";
+
 const Container = styled.div`
   width: 30vw;
   h1 {
@@ -18,33 +24,41 @@ const Form = styled.form`
     margin-bottom: 10px;
     padding-top: 10px;
   }
-  input {
-    padding-left: 10px;
-    width: 100%;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid ${(props) => props.theme.borderColor};
-  }
-  button {
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    width: 100%;
-    height: 40px;
-    font-weight: bold;
-    color: ${(props) => props.theme.buttonTextColor};
-    background-color: ${(props) => props.theme.buttonColor};
-  }
 `;
-
+const ContextInput = styled.input`
+  padding-left: 10px;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.borderColor};
+`;
+const SubmitBtn = styled.button`
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 40px;
+  font-weight: bold;
+  color: ${(props) => props.theme.buttonTextColor};
+  background-color: ${(props) => props.theme.buttonColor};
+`;
+const SDatePicker = styled(DatePicker)`
+  width: 30vw;
+  padding-left: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.borderColor};
+`;
 const Register = () => {
   const navigate = useNavigate();
+  const [date, setDate] = useState(new Date());
   const { register, handleSubmit, getValues } = useForm<IRegisterForm>();
   interface IRegisterForm {
     name: string;
     email: string;
     password1: string;
     password2: string;
+    birthday: string;
   }
   const onValid = () => {
     const url = "http://43.201.7.157:8080/login";
@@ -83,20 +97,28 @@ const Register = () => {
         </div>
         <Form onSubmit={handleSubmit(onValid)}>
           <p>Name</p>
-          <input {...register("name", { required: true })} />
+          <ContextInput {...register("name", { required: true })} />
           <p>Password</p>
-          <input
+          <ContextInput
             {...register("password1", { required: true })}
             type="password"
           />
           <p>Confirm Password</p>
-          <input
+          <ContextInput
             {...register("password2", { required: true })}
             type="password"
           />
           <p>Email</p>
-          <input {...register("email", { required: true })} />
-          <button>Login</button>
+          <ContextInput {...register("email", { required: true })} />
+          <p>Birthday</p>
+          <SDatePicker
+            {...register("birthday", { required: true })}
+            selected={date}
+            onChange={(date: Date) => setDate(date)}
+            locale={ko}
+            maxDate={new Date()}
+          />
+          <SubmitBtn>Login</SubmitBtn>
         </Form>
       </Container>
     </>
