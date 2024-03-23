@@ -35,8 +35,18 @@ const Root = () => {
           <Title>Financial Partners</Title>
         </div>
         <div>
-          <Icon className="material-symbols-outlined">calendar_month</Icon>
-          <Icon className="material-symbols-outlined">query_stats</Icon>
+          <Icon
+            onClick={() => navigate("/calendar")}
+            className="material-symbols-outlined"
+          >
+            calendar_month
+          </Icon>
+          <Icon
+            onClick={() => navigate("/chart")}
+            className="material-symbols-outlined"
+          >
+            query_stats
+          </Icon>
           <Icon
             onClick={() => navigate("/auth/login")}
             className="material-symbols-outlined"
