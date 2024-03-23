@@ -6,6 +6,7 @@ export const darktheme: DefaultTheme = {
   borderColor: "white",
   buttonColor: "white",
   buttonTextColor: "black",
+  subTextColor: "rgb(113, 113, 122)",
 };
 export const lighttheme: DefaultTheme = {
   textColor: "black",
@@ -13,4 +14,5 @@ export const lighttheme: DefaultTheme = {
   borderColor: "#dcdde1",
   buttonColor: "black",
   buttonTextColor: "white",
+  subTextColor: "rgb(113, 113, 122)",
 };

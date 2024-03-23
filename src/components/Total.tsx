@@ -19,7 +19,7 @@ const TitleContainer = styled.div`
   p {
     font-size: 13px;
     font-weight: 200;
-    color: #353b48;
+    color: ${(props) => props.theme.subTextColor};
   }
   padding-bottom: 30px;
 `;
@@ -31,7 +31,7 @@ const SubTitleContainer = styled.div`
     padding-top: 5px;
     font-size: 15px;
     font-weight: 200;
-    color: #353b48;
+    color: ${(props) => props.theme.subTextColor};
   }
 `;
 
