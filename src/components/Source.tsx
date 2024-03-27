@@ -11,6 +11,7 @@ const CombineContainer = styled.div`
   width: 88vw;
   display: grid;
   grid-template-columns: 1fr 30px 1fr;
+  margin-bottom: 30px;
 `;
 
 const Container = styled.div`

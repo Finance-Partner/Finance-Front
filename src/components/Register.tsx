@@ -10,6 +10,7 @@ import { ko } from "date-fns/locale";
 
 const Container = styled.div`
   width: 30vw;
+  margin-top:80px;
   h1 {
     font-size: 35px;
     font-weight: bold;
