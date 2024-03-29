@@ -10,7 +10,7 @@ import { ko } from "date-fns/locale";
 
 const Container = styled.div`
   width: 30vw;
-  margin-top:80px;
+  margin-top: 80px;
   h1 {
     font-size: 35px;
     font-weight: bold;
@@ -43,6 +43,17 @@ const SubmitBtn = styled.button`
   color: ${(props) => props.theme.buttonTextColor};
   background-color: ${(props) => props.theme.buttonColor};
 `;
+const EmailButton = styled.button`
+  background-color: ${(props) => props.theme.buttonColor};
+  color: ${(props) => props.theme.buttonTextColor};
+  width: 50%;
+  height: 30px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+`;
 const SDatePicker = styled(DatePicker)`
   width: 30vw;
   padding-left: 10px;
@@ -52,16 +63,47 @@ const SDatePicker = styled(DatePicker)`
 `;
 const Register = () => {
   const navigate = useNavigate();
+  const [emailToggle, setEmailToggle] = useState(false);
   const [date, setDate] = useState(new Date());
   const { register, handleSubmit, getValues, setValue } =
     useForm<IRegisterForm>();
+
   interface IRegisterForm {
     name: string;
     email: string;
     password1: string;
     password2: string;
     birthday: string;
+    certification: string;
   }
+  const onEmailHandler = () => {
+    const { email } = getValues();
+    const response = axios.post("http://43.201.7.157:8080/email/sending", "", {
+      params: {
+        email: email,
+      },
+      headers: {
+        accept: "application/json",
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    });
+    alert("이메일 전송");
+    setEmailToggle((prev) => true);
+  };
+  const onEmailCheck = () => {
+    const { email, certification } = getValues();
+    const response = axios.post("http://43.201.7.157:8080/email/verify", "", {
+      params: {
+        email: email,
+        verifyCode: certification,
+      },
+      headers: {
+        accept: "application/json",
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    });
+    console.log(response);
+  };
   const onValid = (data: IRegisterForm) => {
     const { name, email, password1, password2, birthday } = getValues();
     if (password1 !== password2) {
@@ -121,6 +163,29 @@ const Register = () => {
           />
           <p>Email</p>
           <ContextInput {...register("email", { required: true })} />
+          <EmailButton type="button" onClick={() => onEmailHandler()}>
+            Send verification email
+          </EmailButton>
+          <br />
+          {emailToggle && (
+            <div style={{ marginTop: "10px" }}>
+              <span
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  color: "black",
+                  marginBottom: "10px",
+                }}
+              >
+                Email sent completed!
+              </span>
+              <br />
+              <ContextInput {...register("certification")} />
+              <EmailButton type="button" onClick={() => onEmailCheck()}>
+                Submit certification
+              </EmailButton>
+            </div>
+          )}
           <p>Birthday</p>
           <SDatePicker
             {...register("birthday", { required: true })}
