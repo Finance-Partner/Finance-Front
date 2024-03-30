@@ -4,3 +4,4 @@
 - Email validation when user change password or find password
 - Save JWT Token in LocalStorage
 - Make Total Calendar
+- Email error
