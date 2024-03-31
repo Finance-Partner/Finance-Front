@@ -5,3 +5,4 @@
 - Save JWT Token in LocalStorage
 - Make Total Calendar
 - Email error
+- 이메일 인증 후 바꾸지 못하게

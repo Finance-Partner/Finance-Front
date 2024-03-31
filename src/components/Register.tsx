@@ -7,6 +7,8 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
+import { useRecoilState } from "recoil";
+import { isAuthenticated } from "../atom";
 
 const Container = styled.div`
   width: 30vw;
@@ -65,6 +67,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [emailToggle, setEmailToggle] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [isCertificate, setIsCertificate] = useState(false);
   const { register, handleSubmit, getValues, setValue } =
     useForm<IRegisterForm>();
 
@@ -92,21 +95,35 @@ const Register = () => {
   };
   const onEmailCheck = () => {
     const { email, certification } = getValues();
-    const response = axios.post("http://43.201.7.157:8080/email/verify", "", {
-      params: {
-        email: email,
-        verifyCode: certification,
-      },
-      headers: {
-        accept: "application/json",
-        "content-type": "application/x-www-form-urlencoded",
-      },
-    });
-    console.log(response);
+    axios
+      .post("http://43.201.7.157:8080/email/verify", null, {
+        params: {
+          email: email,
+          verifyCode: certification,
+        },
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("응답 데이터:", response.data);
+        if (response.data.result === "true") {
+          setIsCertificate(true);
+        }
+      })
+      .catch((error) => {
+        console.error("에러 발생:", error);
+      });
   };
   const onValid = (data: IRegisterForm) => {
     const { name, email, password1, password2, birthday } = getValues();
     if (password1 !== password2) {
+      alert("비밀번호가 같지 않습니다.");
+      //setError 사용코드
+      return;
+    }
+    if (isCertificate === false) {
+      alert("이메일 인증을 완료하셔야 합니다.");
       //setError 사용코드
       return;
     }
