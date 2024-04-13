@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -40,6 +41,7 @@ const Form = styled.form`
 const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues } = useForm<ILoginForm>();
+  console.log(localStorage.getItem("token"));
   interface ILoginForm {
     email: string;
     password: string;
@@ -59,6 +61,8 @@ const Login = () => {
       })
       .then((response) => {
         console.log("Response:", response.data);
+        //save token in recoilToken
+        localStorage.setItem("token", response.data.token);
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -11,7 +11,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 const StyledCalendarWrapper = styled.div`
   width: 100%;
   display: flex;
-  justfiy-content: center;
+  justify-content:center;
   position: relative;
   .react-calendar {
     width: 100%;
