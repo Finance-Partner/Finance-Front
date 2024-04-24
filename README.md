@@ -8,4 +8,4 @@
 - *이메일 인증 후 바꾸지 못하게*
 - Use Apex Chart to show analysis charts
 - Annual and monthly analyses(charts)
-- 달력 완성시키기?
+- 달력 완성시키기
