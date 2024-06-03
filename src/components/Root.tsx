@@ -26,7 +26,7 @@ const Root = () => {
   const navigate = useNavigate();
   return (
     <>
-      <NavBar>
+      {/* <NavBar>
         <div
           onClick={() => navigate("/")}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
@@ -54,7 +54,7 @@ const Root = () => {
             person
           </Icon>
         </div>
-      </NavBar>
+      </NavBar> */}
       <Outlet />
     </>
   );

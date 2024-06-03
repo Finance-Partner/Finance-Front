@@ -6,6 +6,7 @@ import Calendar from "../screen/Calendar";
 import Chart from "../screen/Chart";
 import Login from "./Login";
 import Register from "./Register";
+import Main from "../screen/Main";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <Main />,
       },
       { path: "calendar", element: <Calendar /> },
       { path: "chart", element: <Chart /> },
