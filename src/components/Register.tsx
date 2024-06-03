@@ -7,12 +7,22 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
-import { useRecoilState } from "recoil";
-import { isAuthenticated } from "../atom";
+
+const BigContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  background-color: rgb(250, 250, 250);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  width: 70vw;
+  height: 80vh;
+`;
 
 const Container = styled.div`
-  width: 30vw;
-  margin-top: 80px;
+  width: 50%;
+  height: 100%;
+  padding-left: 30px;
   h1 {
     font-size: 35px;
     font-weight: bold;
@@ -20,7 +30,7 @@ const Container = styled.div`
   }
 `;
 const Form = styled.form`
-  width: 100%;
+  width: 85%;
   padding-top: 20px;
   p {
     font-weight: 600;
@@ -152,74 +162,94 @@ const Register = () => {
   };
   return (
     <>
-      <Container>
-        <div>
-          <h1>Register</h1>
-          <p>
-            Already have an account?{" "}
-            <span
-              onClick={() => navigate("/auth/login")}
-              style={{ textDecoration: "underline", cursor: "pointer" }}
-            >
-              Login
-            </span>
-          </p>
-        </div>
-        <Form onSubmit={handleSubmit(onValid, onError)}>
-          <p>Name</p>
-          <ContextInput {...register("name", { required: true })} />
-          <p>Password</p>
-          <ContextInput
-            {...register("password1", { required: true })}
-            type="password"
-          />
-          <p>Confirm Password</p>
-          <ContextInput
-            {...register("password2", { required: true })}
-            type="password"
-          />
-          <p>Email</p>
-          <ContextInput {...register("email", { required: true })} />
-          <EmailButton type="button" onClick={() => onEmailHandler()}>
-            Send verification email
-          </EmailButton>
-          <br />
-          {emailToggle && (
-            <div style={{ marginTop: "10px" }}>
-              <span
-                style={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  color: "black",
-                  marginBottom: "10px",
-                }}
-              >
-                Email sent completed!
-              </span>
-              <br />
-              <ContextInput {...register("certification")} />
-              <EmailButton type="button" onClick={() => onEmailCheck()}>
-                Submit certification
-              </EmailButton>
-            </div>
-          )}
-          <p>Birthday</p>
-          <SDatePicker
-            {...register("birthday", { required: true })}
-            selected={date}
-            onChange={(date: Date) => {
-              setDate(date);
-              const formattedDate = `${date.getFullYear()}-${
-                date.getMonth() + 1
-              }-${date.getDate()}`;
-              setValue("birthday", formattedDate, { shouldValidate: true });
+      <BigContainer>
+        <Container style={{ borderRight: "1px solid black" }}>
+          <h1
+            onClick={() => navigate("/preview")}
+            style={{
+              cursor:"pointer",
+              width: "100%",
+              height: "100%",
+              paddingRight: "3vw",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            locale={ko}
-            maxDate={new Date()}
-          />
-          <SubmitBtn>Register</SubmitBtn>
-        </Form>
-      </Container>
+          >
+            <p
+              style={{ fontSize: "80px", marginRight: "20px" }}
+              className="material-symbols-outlined"
+            >
+              payments
+            </p>
+            <p style={{ fontSize: "50px" }}>
+              Financial <br />
+              Partners
+            </p>
+          </h1>
+        </Container>
+        <Container
+          style={{
+            paddingTop: "6vh",
+            paddingLeft: "5vw",
+            paddingRight: "2vw",
+            borderLeft: "1px solid black",
+          }}
+        >
+          <div>
+            <h1>회원가입</h1>
+            <p>
+              이미 계정이 있으십니까?{" "}
+              <span
+                onClick={() => navigate("/auth/login")}
+                style={{ textDecoration: "underline", cursor: "pointer" }}
+              >
+                로그인
+              </span>
+            </p>
+          </div>
+          <Form onSubmit={handleSubmit(onValid, onError)}>
+            <p>이름</p>
+            <ContextInput {...register("name", { required: true })} />
+            <p>비밀번호</p>
+            <ContextInput
+              {...register("password1", { required: true })}
+              type="password"
+            />
+            <p>비밀번호 확인</p>
+            <ContextInput
+              {...register("password2", { required: true })}
+              type="password"
+            />
+            <p>이메일</p>
+            <ContextInput {...register("email", { required: true })} />
+            <EmailButton type="button" onClick={() => onEmailHandler()}>
+              인증 메일 보내기
+            </EmailButton>
+            <br />
+            {emailToggle && (
+              <div style={{ marginTop: "10px" }}>
+                <span
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    color: "black",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Email sent completed!
+                </span>
+                <br />
+                <ContextInput {...register("certification")} />
+                <EmailButton type="button" onClick={() => onEmailCheck()}>
+                  Submit certification
+                </EmailButton>
+              </div>
+            )}
+            <SubmitBtn>회원가입</SubmitBtn>
+          </Form>
+        </Container>
+      </BigContainer>
     </>
   );
 };

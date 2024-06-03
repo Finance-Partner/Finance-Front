@@ -5,9 +5,10 @@ import { Outlet } from "react-router-dom";
 const Wrapper = styled.div`
   display: flex;
   width: 100vw;
-  height: 70vh;
+  height: 100vh;
   justify-content: center;
   align-items: center;
+  background-image: linear-gradient(to right, #5144a6, #917fff);
 `;
 
 const Auth = () => {

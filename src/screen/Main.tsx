@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import image from "../img/mainimage.png";
 
 const NavBar = styled.nav`
   display: flex;
@@ -20,7 +21,10 @@ const NavTitleLogo = styled.span`
   font-size: 40px;
 `;
 const LoginBtn = styled.button`
-  background-color: #4530c8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6e5fce;
   color: white;
   border: none;
   width: 90px;
@@ -28,7 +32,6 @@ const LoginBtn = styled.button`
   border-radius: 10px;
   font-size: 15px;
   font-weight: bold;
-  padding-top: 5px;
   margin-top: 10px;
   margin-right: 15px;
   cursor: pointer;
@@ -38,7 +41,7 @@ const FContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 80vh;
+  height: 690px;
   background-image: linear-gradient(to right, #5144a6, #917fff);
 `;
 const SContainer = styled.div`
@@ -65,7 +68,7 @@ const Main = () => {
     <>
       <NavBar>
         <div
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/preview")}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         >
           <NavTitleLogo className="material-symbols-outlined">
@@ -78,7 +81,7 @@ const Main = () => {
           </NavTitle>
         </div>
         <div>
-          <LoginBtn>Login</LoginBtn>
+          <LoginBtn onClick={() => navigate("/auth/login")}>로그인</LoginBtn>
         </div>
       </NavBar>
       <FContainer>
@@ -94,6 +97,9 @@ const Main = () => {
             <br />
             내일부터는 나도 재벌 1세
           </SubTitle>
+        </div>
+        <div>
+          <img style={{ paddingLeft: "10vw",position:"relative",top:"30px" }} src={image} />
         </div>
       </FContainer>
       <SContainer>
