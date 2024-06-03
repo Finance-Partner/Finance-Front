@@ -2,6 +2,7 @@ import styled from "styled-components";
 import DonutChart from "../chart/DonutChart";
 import MonthIncome from "../chart/MonthIncome";
 import MonthExpense from "../chart/MonthExpense";
+import CategoryChart from "../chart/CategoryChart";
 
 const Wrapper = styled.div`
   display: grid;
@@ -66,7 +67,7 @@ const DashBoard = () => {
         <MonthExpense />
       </Item3>
       <Item4></Item4>
-      <Item5>2행 1~3열</Item5>
+      <Item5><CategoryChart /></Item5>
       <Item6>2~3행 4열</Item6>
       <Item7>3행 1~1.5열</Item7>
       <Item8>3행 1.5~3열</Item8>
