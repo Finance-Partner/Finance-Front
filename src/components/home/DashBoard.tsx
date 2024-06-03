@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import DonutChart from "../chart/DonutChart";
 
 const Wrapper = styled.div`
   display: grid;
@@ -13,7 +14,7 @@ const GridItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius:20px;
+  border-radius: 20px;
 `;
 
 const Item1 = styled(GridItem)`
@@ -53,7 +54,9 @@ const Item8 = styled(GridItem)`
 const DashBoard = () => {
   return (
     <Wrapper>
-      <Item1>1행 1열</Item1>
+      <Item1>
+        <DonutChart />
+      </Item1>
       <Item2>1행 2열</Item2>
       <Item3>1행 3열</Item3>
       <Item4>1행 4열</Item4>
