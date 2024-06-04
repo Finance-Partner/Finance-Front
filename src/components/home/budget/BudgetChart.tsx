@@ -12,6 +12,7 @@ interface BudgetChartProps {
   budget: number; // This is the budget
   title: string;
   subtitle: string;
+  color: string;
 }
 
 const BudgetChart: React.FC<BudgetChartProps> = ({
@@ -19,6 +20,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({
   budget,
   title,
   subtitle,
+  color,
 }) => {
   const options: ApexOptions = {
     chart: {
@@ -61,7 +63,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({
       show: false, // Hide grid lines
     },
     fill: {
-      colors: ["#008FFB"],
+      colors: [color],
     },
   };
 
@@ -78,8 +80,8 @@ const BudgetChart: React.FC<BudgetChartProps> = ({
         options={options}
         series={series}
         type="bar"
-        height={100}
-        width="100%"
+        height={120}
+        width="90%"
       />
     </Wrapper>
   );
