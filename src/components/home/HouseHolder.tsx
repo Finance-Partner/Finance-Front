@@ -8,16 +8,28 @@ const Wrapper = styled.div`
 const ButtonContainer = styled.div`
   width: 100%;
   height: 10%;
+  display: flex;
+  justify-content: space-between;
 `;
 const Btn = styled.button<{ isActive: boolean }>`
   width: 130px;
   height: 80%;
   margin-right: 20px;
-  border-radius: 20px;
+  border-radius: 40px;
   background-color: white;
   color: ${(props) => (props.isActive ? "#7763F4" : "#7b7f85")};
   border: 1px solid ${(props) => (props.isActive ? "#7763F4" : "#7b7f85")};
   cursor: pointer;
+`;
+const SubmitBtn = styled.button`
+  width: 150px;
+  height: 80%;
+  margin-right: 20px;
+  border-radius: 40px;
+  border: none;
+  background-color: #7763f4;
+  color: white;
+  font-weight: bold;
 `;
 const OutletContainer = styled.div`
   width: 100%;
@@ -30,18 +42,22 @@ const HouseHolder = () => {
   return (
     <Wrapper>
       <ButtonContainer>
-        <Btn
-          onClick={() => navigate("/householder/overview")}
-          isActive={overviewMatch != null}
-        >
-          캘린더
-        </Btn>
-        <Btn
-          onClick={() => navigate("/householder/detail")}
-          isActive={detaildMatch != null}
-        >
-          내역
-        </Btn>
+        <div>
+          <Btn
+            onClick={() => navigate("/householder/overview")}
+            isActive={overviewMatch != null}
+          >
+            캘린더
+          </Btn>
+          <Btn
+            onClick={() => navigate("/householder/detail")}
+            isActive={detaildMatch != null}
+          >
+            내역
+          </Btn>
+        </div>
+        <SubmitBtn>가계부 작성하기</SubmitBtn> 
+        {/* 나중에 useOutletContext 사용해서 제출버튼 전송 */}
       </ButtonContainer>
       <OutletContainer>
         <Outlet />

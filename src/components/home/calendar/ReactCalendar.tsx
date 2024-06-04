@@ -10,15 +10,15 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const StyledCalendarWrapper = styled.div`
   width: 100%;
+  height:100%;
   display: flex;
   justify-content:center;
   position: relative;
   .react-calendar {
     width: 100%;
     border: none;
-    border-radius: 0.5rem;
-    box-shadow: 4px 2px 10px 0px rgba(0, 0, 0, 0.13);
-    padding: 3% 5%;
+    border-radius: 20px;
+    padding: 8% 5%;
     background-color: white;
   }
 `;
