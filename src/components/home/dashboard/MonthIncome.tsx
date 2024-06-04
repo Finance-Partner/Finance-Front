@@ -13,6 +13,7 @@ const TitleContainer = styled.h1`
   position: relative;
   top: 10px;
   text-align: center;
+  font-size:12px;
   font-weight: bold;
   height: 10%;
 `;
@@ -24,7 +25,7 @@ const MonthIncome = () => {
   const [data] = useState({
     series: [
       {
-        name: "Sample Data",
+        name: "수입",
         data: [30, 40, 35],
       },
     ],

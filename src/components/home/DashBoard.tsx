@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import DonutChart from "../chart/DonutChart";
-import MonthIncome from "../chart/MonthIncome";
-import MonthExpense from "../chart/MonthExpense";
-import CategoryChart from "../chart/CategoryChart";
+import DonutChart from "./dashboard/DonutChart";
+import MonthIncome from "./dashboard/MonthIncome";
+import MonthExpense from "./dashboard/MonthExpense";
+import CategoryChart from "./dashboard/CategoryChart";
+import FixIncome from "./dashboard/FixIncome";
+import FixExpense from "./dashboard/FixExpense";
 
 const Wrapper = styled.div`
   display: grid;
@@ -51,8 +53,12 @@ const Item7 = styled(GridItem)`
   grid-row: 3 / 4;
 `;
 const Item8 = styled(GridItem)`
-  grid-column: 2 / 4;
+  grid-column: 2 / 3;
   grid-row: 3 / 4;
+`;
+const Item9 = styled(GridItem)`
+  grid-column: 3/4;
+  grid-row: 3/4;
 `;
 const DashBoard = () => {
   return (
@@ -67,10 +73,17 @@ const DashBoard = () => {
         <MonthExpense />
       </Item3>
       <Item4></Item4>
-      <Item5><CategoryChart /></Item5>
+      <Item5>
+        <CategoryChart />
+      </Item5>
       <Item6>2~3행 4열</Item6>
       <Item7>3행 1~1.5열</Item7>
-      <Item8>3행 1.5~3열</Item8>
+      <Item8>
+        <FixIncome />
+      </Item8>
+      <Item9>
+        <FixExpense />
+      </Item9>
     </Wrapper>
   );
 };
