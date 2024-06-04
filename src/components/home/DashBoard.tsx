@@ -5,6 +5,7 @@ import MonthExpense from "./dashboard/MonthExpense";
 import CategoryChart from "./dashboard/CategoryChart";
 import FixIncome from "./dashboard/FixIncome";
 import FixExpense from "./dashboard/FixExpense";
+import Teammate from "./dashboard/Teammate";
 
 const Wrapper = styled.div`
   display: grid;
@@ -77,7 +78,9 @@ const DashBoard = () => {
         <CategoryChart />
       </Item5>
       <Item6>2~3행 4열</Item6>
-      <Item7>3행 1~1.5열</Item7>
+      <Item7>
+        <Teammate />
+      </Item7>
       <Item8>
         <FixIncome />
       </Item8>
