@@ -13,6 +13,7 @@ const TitleContainer = styled.h1`
   position: relative;
   top: 10px;
   text-align: center;
+  font-size: 13px;
   font-weight: bold;
   height: 10%;
 `;

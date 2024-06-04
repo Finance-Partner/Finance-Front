@@ -13,6 +13,7 @@ const TitleContainer = styled.h1`
   position: relative;
   top: 10px;
   text-align: center;
+  font-size:12px;
   font-weight: bold;
   height: 10%;
 `;
@@ -82,7 +83,7 @@ const DonutChart = () => {
                     return getLabel();
                   },
                   style: {
-                    fontSize: "12px", // 폰트 크기 변경
+                    fontSize: "6px", // 폰트 크기 변경
                     color: getColor(),
                   },
                 },
