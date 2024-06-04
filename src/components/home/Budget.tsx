@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import Chart from "react-apexcharts";
+import BudgetChart from "./budget/BudgetChart";
 
 const Wrapper = styled.div`
   display: grid;
@@ -13,7 +15,7 @@ const GridItem1 = styled.div`
   display: flex;
   align-items: center;
   justify-content: left;
-  padding-left:30px;
+  padding-left: 30px;
   border-radius: 20px;
 `;
 const GridItem2 = styled.div`
@@ -53,7 +55,13 @@ const Price = styled.p<{ isIncome: boolean }>`
     font-size: 20px;
   }
 `;
+
 const Budget = () => {
+  const currentMonthSpending = 450000; // This is the spending
+  const currentMonthBudget = 1000000; // This is the budget
+  const lastMonthSpending = 1240000; // This is the spending
+  const lastMonthBudget = 1000000; // This is the budget
+  const remainingBudget = currentMonthBudget - currentMonthSpending;
   return (
     <Wrapper>
       <Item1>
@@ -72,8 +80,22 @@ const Budget = () => {
           </Price>
         </div>
       </Item2>
-      <Item3>1행 3열</Item3>
-      <Item4>1행 4열</Item4>
+      <Item3>
+        <BudgetChart
+          data={currentMonthSpending}
+          budget={currentMonthBudget}
+          title="이번 달 예산"
+          subtitle={`${currentMonthBudget.toLocaleString()} 원`}
+        />
+      </Item3>
+      <Item4>
+        <BudgetChart
+            data={lastMonthSpending} 
+            budget={lastMonthBudget} 
+            title="지난 달 예산" 
+            subtitle={`${lastMonthBudget.toLocaleString()} 원`} 
+        />
+      </Item4>
     </Wrapper>
   );
 };
