@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -55,7 +56,7 @@ const DashHistory = () => {
           >
             <CategoryImg />
             <div style={{ marginLeft: "10px" }}>
-              <Price isIncome={false}>-8,000원</Price>
+              <Price isIncome={false}>-{formatNumberWithCommas(8000)}원</Price>
               <Description>친구랑 국밥</Description>
             </div>
           </div>
@@ -64,7 +65,7 @@ const DashHistory = () => {
           >
             <CategoryImg />
             <div style={{ marginLeft: "10px" }}>
-              <Price isIncome={false}>-32,000원</Price>
+              <Price isIncome={false}>-{formatNumberWithCommas(32000)}원</Price>
               <Description>쇼핑</Description>
             </div>
           </div>
@@ -76,7 +77,7 @@ const DashHistory = () => {
           >
             <CategoryImg />
             <div style={{ marginLeft: "10px" }}>
-              <Price isIncome={true}>+2,320,000원</Price>
+              <Price isIncome={true}>+{formatNumberWithCommas(2320000)}원</Price>
               <Description>월급</Description>
             </div>
           </div>
@@ -85,7 +86,7 @@ const DashHistory = () => {
           >
             <CategoryImg />
             <div style={{ marginLeft: "10px" }}>
-              <Price isIncome={false}>-22,000원</Price>
+              <Price isIncome={false}>-{formatNumberWithCommas(22000)}원</Price>
               <Description>큐빅 회식</Description>
             </div>
           </div>

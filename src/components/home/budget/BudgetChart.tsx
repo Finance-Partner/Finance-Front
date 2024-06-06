@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   width: 100%;
-  padding-right:20px;
+  padding-right:20px; 
 `;
 interface BudgetChartProps {
   data: number; // This is the spending
@@ -63,13 +63,20 @@ const BudgetChart: React.FC<BudgetChartProps> = ({
       show: false, // Hide grid lines
     },
     fill: {
+      type: 'solid',
       colors: [color],
+    },
+    dataLabels: {
+      enabled: false, // Hide data labels
+    },
+    tooltip: {
+      enabled: false, // Hide tooltip
     },
   };
 
   const series = [
     {
-      name: "Spending",
+      name: "지출",
       data: [data],
     },
   ];
