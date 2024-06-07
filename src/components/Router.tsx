@@ -11,6 +11,7 @@ import Analysis from "./home/Analysis";
 import DashBoard from "./home/DashBoard";
 import Overview from "./home/calendar/Overview";
 import Detail from "./home/calendar/Detail";
+import ProtectedRoute from "./ProtectedRoute"; // 방금 만든 ProtectedRoute 컴포넌트 import
 
 const router = createBrowserRouter([
   {
@@ -19,22 +20,62 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
         children: [
-          { path: "dashboard", element: <DashBoard /> },
+          {
+            path: "dashboard",
+            element: (
+              <ProtectedRoute>
+                <DashBoard />
+              </ProtectedRoute>
+            ),
+          },
           {
             path: "householder",
-            element: <HouseHolder />,
+            element: (
+              <ProtectedRoute>
+                <HouseHolder />
+              </ProtectedRoute>
+            ),
             children: [
               {
                 path: "overview",
-                element: <Overview />,
+                element: (
+                  <ProtectedRoute>
+                    <Overview />
+                  </ProtectedRoute>
+                ),
               },
-              { path: "detail", element: <Detail /> },
+              {
+                path: "detail",
+                element: (
+                  <ProtectedRoute>
+                    <Detail />
+                  </ProtectedRoute>
+                ),
+              },
             ],
           },
-          { path: "budget", element: <Budget /> },
-          { path: "analysis", element: <Analysis /> },
+          {
+            path: "budget",
+            element: (
+              <ProtectedRoute>
+                <Budget />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "analysis",
+            element: (
+              <ProtectedRoute>
+                <Analysis />
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
     ],
