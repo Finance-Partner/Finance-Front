@@ -20,70 +20,71 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
+        element: <Main />,
+      },
+    ],
+  },
+  {
+    path: "/home",
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "dashboard",
         element: (
           <ProtectedRoute>
-            <Home />
+            <DashBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "householder",
+        element: (
+          <ProtectedRoute>
+            <HouseHolder />
           </ProtectedRoute>
         ),
         children: [
           {
-            path: "dashboard",
+            path: "overview",
             element: (
               <ProtectedRoute>
-                <DashBoard />
+                <Overview />
               </ProtectedRoute>
             ),
           },
           {
-            path: "householder",
+            path: "detail",
             element: (
               <ProtectedRoute>
-                <HouseHolder />
-              </ProtectedRoute>
-            ),
-            children: [
-              {
-                path: "overview",
-                element: (
-                  <ProtectedRoute>
-                    <Overview />
-                  </ProtectedRoute>
-                ),
-              },
-              {
-                path: "detail",
-                element: (
-                  <ProtectedRoute>
-                    <Detail />
-                  </ProtectedRoute>
-                ),
-              },
-            ],
-          },
-          {
-            path: "budget",
-            element: (
-              <ProtectedRoute>
-                <Budget />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: "analysis",
-            element: (
-              <ProtectedRoute>
-                <Analysis />
+                <Detail />
               </ProtectedRoute>
             ),
           },
         ],
       },
+      {
+        path: "budget",
+        element: (
+          <ProtectedRoute>
+            <Budget />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "analysis",
+        element: (
+          <ProtectedRoute>
+            <Analysis />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
-  {
-    path: "/preview",
-    element: <Main />,
-  },
+
   {
     path: "/auth",
     element: <Auth />,

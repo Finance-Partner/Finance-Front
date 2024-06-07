@@ -37,20 +37,20 @@ const OutletContainer = styled.div`
 `;
 const HouseHolder = () => {
   const navigate = useNavigate();
-  const overviewMatch = useMatch("/householder/overview");
-  const detaildMatch = useMatch("/householder/detail");
+  const overviewMatch = useMatch("/home/householder/overview");
+  const detaildMatch = useMatch("/home/householder/detail");
   return (
     <Wrapper>
       <ButtonContainer>
         <div>
           <Btn
-            onClick={() => navigate("/householder/overview")}
+            onClick={() => navigate("/home/householder/overview")}
             isActive={overviewMatch != null}
           >
             캘린더
           </Btn>
           <Btn
-            onClick={() => navigate("/householder/detail")}
+            onClick={() => navigate("/home/householder/detail")}
             isActive={detaildMatch != null}
           >
             내역
