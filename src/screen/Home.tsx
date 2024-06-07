@@ -117,10 +117,10 @@ const UserImg = styled.img`
   background-color: black;
 `;
 const Home = () => {
-  const dashboardMatch = useMatch("/dashboard");
-  const householderdMatch = useMatch("/householder/:select");
-  const budgetMatch = useMatch("/budget");
-  const anaylsisMatch = useMatch("/analysis");
+  const dashboardMatch = useMatch("/home/dashboard");
+  const householderdMatch = useMatch("/home/householder/:select");
+  const budgetMatch = useMatch("/home/budget");
+  const anaylsisMatch = useMatch("/home/analysis");
   const navigate = useNavigate();
 
   return (
@@ -158,7 +158,7 @@ const Home = () => {
             </p>
             <DoubleIconContainer>
               <IconContaienr
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/home/dashboard")}
                 isActive={dashboardMatch != null}
               >
                 <div>
@@ -172,7 +172,7 @@ const Home = () => {
                 </div>
               </IconContaienr>
               <IconContaienr
-                onClick={() => navigate("/householder/overview")}
+                onClick={() => navigate("/home/householder/overview")}
                 isActive={householderdMatch != null}
               >
                 <div>
@@ -188,7 +188,7 @@ const Home = () => {
             </DoubleIconContainer>
             <DoubleIconContainer>
               <IconContaienr
-                onClick={() => navigate("/budget")}
+                onClick={() => navigate("/home/budget")}
                 isActive={budgetMatch != null}
               >
                 <div>
@@ -202,7 +202,7 @@ const Home = () => {
                 </div>
               </IconContaienr>
               <IconContaienr
-                onClick={() => navigate("/analysis")}
+                onClick={() => navigate("/home/analysis")}
                 isActive={anaylsisMatch != null}
               >
                 <div>
