@@ -125,6 +125,11 @@ const Input = styled.input`
   text-align: left;
   padding-left: 0;
   background: transparent;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Chrome, Safari, Edge */
+    margin: 0;
+  }
 `;
 
 const Budget = () => {
