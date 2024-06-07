@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const FixIncome = () => {
       <div>
         <Title>월 고정 수입</Title>
         <Income>
-          79,000<span>KR</span>
+          {formatNumberWithCommas(79000)}<span>KR</span>
         </Income>
       </div>
     </Wrapper>

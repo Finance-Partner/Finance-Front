@@ -4,10 +4,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { ko } from "date-fns/locale";
-
 const BigContainer = styled.div`
   display: flex;
   align-items: center;
@@ -66,20 +62,24 @@ const EmailButton = styled.button`
   border: none;
   cursor: pointer;
 `;
-const SDatePicker = styled(DatePicker)`
-  width: 30vw;
-  padding-left: 10px;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid ${(props) => props.theme.borderColor};
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
 `;
+
 const Register = () => {
   const navigate = useNavigate();
   const [emailToggle, setEmailToggle] = useState(false);
-  const [date, setDate] = useState(new Date());
   const [isCertificate, setIsCertificate] = useState(false);
-  const { register, handleSubmit, getValues, setValue } =
-    useForm<IRegisterForm>();
+  const [errorMessage, setErrorMessage] = useState("");
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm<IRegisterForm>();
 
   interface IRegisterForm {
     name: string;
@@ -91,17 +91,25 @@ const Register = () => {
   }
   const onEmailHandler = () => {
     const { email } = getValues();
-    const response = axios.post("http://43.201.7.157:8080/email/sending", "", {
-      params: {
-        email: email,
-      },
-      headers: {
-        accept: "application/json",
-        "content-type": "application/x-www-form-urlencoded",
-      },
-    });
-    alert("이메일 전송");
-    setEmailToggle((prev) => true);
+    axios
+      .post("http://43.201.7.157:8080/email/sending", "", {
+        params: {
+          email: email,
+        },
+        headers: {
+          accept: "application/json",
+          "content-type": "application/x-www-form-urlencoded",
+        },
+      })
+      .then(() => {
+        alert("이메일 전송");
+        setEmailToggle(true);
+        setErrorMessage(""); // 이메일 전송 성공 시 에러 메시지 초기화
+      })
+      .catch((error) => {
+        console.error("이메일 전송 실패:", error);
+        setErrorMessage("이메일 전송에 실패했습니다. 다시 시도해주세요."); // 에러 발생 시 에러 메시지 설정
+      });
   };
   const onEmailCheck = () => {
     const { email, certification } = getValues();
@@ -125,7 +133,7 @@ const Register = () => {
         console.error("에러 발생:", error);
       });
   };
-  const onValid = (data: IRegisterForm) => {
+  const onValid = async (data: IRegisterForm) => {
     const { name, email, password1, password2, birthday } = getValues();
     if (password1 !== password2) {
       alert("비밀번호가 같지 않습니다.");
@@ -143,19 +151,41 @@ const Register = () => {
       name: name,
       birthday: birthday,
     };
-    axios
-      .post("http://43.201.7.157:8080/user", null, {
+    try {
+      await axios.post("http://43.201.7.157:8080/user", null, {
         params: params,
         headers: {
           accept: "application/json",
         },
-      })
-      .then((response) => {
-        console.log("Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
       });
+      console.log("회원가입 성공");
+
+      // 로그인 요청
+      const loginResponse = await axios.post(
+        "http://43.201.7.157:8080/login",
+        null,
+        {
+          params: {
+            email: email,
+            password: password1,
+          },
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+      console.log("로그인 성공:", loginResponse.data);
+
+      // 토큰을 localStorage에 저장
+      localStorage.setItem("token", loginResponse.data.token);
+
+      // 대시보드로 이동
+      navigate("/dashboard");
+      setErrorMessage(""); // 에러 메시지 초기화
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("유효하지 않은 회원가입입니다."); // 에러 발생 시 에러 메시지 설정
+    }
   };
   const onError = (errors: Object) => {
     console.log("error has occured", errors);
@@ -167,7 +197,7 @@ const Register = () => {
           <h1
             onClick={() => navigate("/preview")}
             style={{
-              cursor:"pointer",
+              cursor: "pointer",
               width: "100%",
               height: "100%",
               paddingRight: "3vw",
@@ -222,7 +252,18 @@ const Register = () => {
               type="password"
             />
             <p>이메일</p>
-            <ContextInput {...register("email", { required: true })} />
+            <ContextInput
+              {...register("email", {
+                required: true,
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "유효하지 않은 이메일 형식입니다",
+                },
+              })}
+            />
+            {errors.email && (
+              <ErrorMessage>{errors.email.message}</ErrorMessage>
+            )}
             <EmailButton type="button" onClick={() => onEmailHandler()}>
               인증 메일 보내기
             </EmailButton>
@@ -244,9 +285,21 @@ const Register = () => {
                 <EmailButton type="button" onClick={() => onEmailCheck()}>
                   Submit certification
                 </EmailButton>
+                {isCertificate && (
+                  <span
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: "bold",
+                      color: "green",
+                    }}
+                  >
+                    이메일 인증 성공!
+                  </span>
+                )}
               </div>
             )}
             <SubmitBtn>회원가입</SubmitBtn>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </Form>
         </Container>
       </BigContainer>

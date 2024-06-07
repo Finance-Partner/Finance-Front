@@ -62,10 +62,31 @@ const SubTitle = styled.h2`
   font-size: 30px;
   font-weight: bold;
 `;
+const MoveToTopBtn = styled.button`
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  bottom: 10px;
+  right: 10px;
+  border: 2px solid #917fff;
+`;
 const Main = () => {
   const navigate = useNavigate();
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드럽게 스크롤
+    });
+  };
   return (
     <>
+      <MoveToTopBtn
+        onClick={handleScrollToTop}
+        className="material-symbols-outlined"
+      >
+        arrow_upward
+      </MoveToTopBtn>
       <NavBar>
         <div
           onClick={() => navigate("/preview")}
@@ -99,7 +120,10 @@ const Main = () => {
           </SubTitle>
         </div>
         <div>
-          <img style={{ paddingLeft: "10vw",position:"relative",top:"30px" }} src={image} />
+          <img
+            style={{ paddingLeft: "10vw", position: "relative", top: "30px" }}
+            src={image}
+          />
         </div>
       </FContainer>
       <SContainer>

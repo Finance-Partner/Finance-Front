@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 import BudgetChart from "./budget/BudgetChart";
+import { formatNumberWithCommas } from "../utils";
 
 const Wrapper = styled.div`
   display: grid;
@@ -98,7 +99,7 @@ const Budget = () => {
         <div>
           <Title>이번 달 지출</Title>
           <Price isIncome={false}>
-            450,000<span>원</span>
+            {formatNumberWithCommas(450000)}<span>원</span>
           </Price>
         </div>
       </Item1>
@@ -106,14 +107,14 @@ const Budget = () => {
         <div>
           <Title>예산</Title>
           <Price isIncome={true}>
-            1,000,000<span>원</span>
+          {formatNumberWithCommas(1000000)}<span>원</span>
           </Price>
         </div>
       </Item2>
       <Item3>
         <BottomContainer>
           <h3>이번 달 예산</h3>
-          <h4>{remainingBudget}원 남았습니다</h4>
+          <h4>{formatNumberWithCommas(remainingBudget)}원 남았습니다</h4>
           <BudgetChart
             data={currentMonthSpending}
             budget={currentMonthBudget}
@@ -122,15 +123,15 @@ const Budget = () => {
             color="#1ED8AB"
           />
           <h5>이번 달 예산</h5>
-          <h6>{currentMonthBudget} 원</h6>
+          <h6>{formatNumberWithCommas(currentMonthBudget)} 원</h6>
           <h5>이번 달 지출</h5>
-          <h6>{currentMonthSpending} 원</h6>
+          <h6>{formatNumberWithCommas(currentMonthSpending)} 원</h6>
         </BottomContainer>
       </Item3>
       <Item4>
         <BottomContainer>
           <h3>저번 달 예산 결과</h3>
-          <h4>{remainingBudget}원 초과했습니다</h4>
+          <h4>{formatNumberWithCommas(remainingBudget)}원 초과했습니다</h4>
           <BudgetChart
             data={lastMonthSpending}
             budget={lastMonthBudget}
@@ -139,9 +140,9 @@ const Budget = () => {
             color="#7763F4"
           />
           <h5>지난 달 예산</h5>
-          <h6>{lastMonthBudget} 원</h6>
+          <h6>{formatNumberWithCommas(lastMonthBudget)} 원</h6>
           <h5>지난 달 지출</h5>
-          <h6>{lastMonthSpending} 원</h6>
+          <h6>{formatNumberWithCommas(lastMonthSpending)} 원</h6>
         </BottomContainer>
       </Item4>
     </Wrapper>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ReactCalendar from "./ReactCalendar";
 import SubmitForm from "./SubmitForm";
+import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
   display: grid;
@@ -63,7 +64,7 @@ const Overview = () => {
           <div>
             <Title>이번 달 수입</Title>
             <Price isIncome={true}>
-              820,000<span>원</span>
+              {formatNumberWithCommas(820000)}<span>원</span>
             </Price>
           </div>
         </Item1>
@@ -71,7 +72,7 @@ const Overview = () => {
           <div>
             <Title>이번 달 지출</Title>
             <Price isIncome={false}>
-              450,000<span>원</span>
+            {formatNumberWithCommas(450000)}<span>원</span>
             </Price>
           </div>
         </Item2>
@@ -79,7 +80,7 @@ const Overview = () => {
           <div>
             <Title>이번 달 정산</Title>
             <Price isIncome={true}>
-              +370,000<span>원</span>
+              +{formatNumberWithCommas(320000)}<span>원</span>
             </Price>
           </div>
         </Item3>
