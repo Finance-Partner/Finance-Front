@@ -249,7 +249,7 @@ const Budget = () => {
             budget={currentMonthBudget}
             title="이번 달 예산"
             subtitle={`${currentMonthBudget.toLocaleString()} 원`}
-            color="#1ED8AB"
+            color={remainingBudget < 0 ? "#7763F4" : "#1ED8AB"}
           />
           <p
             style={{
@@ -282,7 +282,7 @@ const Budget = () => {
             budget={lastMonthBudget}
             title="지난 달 예산"
             subtitle={`${lastMonthBudget.toLocaleString()} 원`}
-            color="#7763F4"
+            color={remainingBudget < 0 ? "#7763F4" : "#1ED8AB"}
           />
           <p
             style={{
