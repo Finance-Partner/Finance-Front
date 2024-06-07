@@ -1,11 +1,10 @@
 ### To Do List
 
-- Email validation when user register
-- Email validation when user change password or find password
-- Save JWT Token in LocalStorage
-- Make Total Calendar
-- Email error => useState이용
-- *이메일 인증 후 바꾸지 못하게*
-- Use Apex Chart to show analysis charts
-- Annual and monthly analyses(charts)
-- 달력 완성시키기?
+- register css변경
+- 가계부 페이지 달력 연동
+- 팀원 이미지 받기
+- 카테고리별로 이미지 추가해서 내역에 표시
+- 가계부 선택하는 css작성
+- 분석 탭 완성
+- 설정 페이지 작성
+- 반응형으로 수정

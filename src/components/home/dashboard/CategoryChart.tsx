@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { householderIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -9,6 +12,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const TitleContainer = styled.h1`
   position: relative;
   top: 10px;
@@ -17,6 +21,7 @@ const TitleContainer = styled.h1`
   font-weight: bold;
   height: 10%;
 `;
+
 const ChartContainer = styled.div`
   position: relative;
   bottom: 0px;
@@ -32,10 +37,11 @@ const CategoryChart = () => {
     "#9966FF",
     "#FF9F40",
   ];
-  const [data] = useState({
+
+  const [data, setData] = useState({
     series: [
       {
-        data: [21, 22, 10, 28, 16],
+        data: [] as number[],
       },
     ],
     options: {
@@ -58,11 +64,12 @@ const CategoryChart = () => {
       },
       xaxis: {
         categories: [
-          ["식비"],
-          ["쇼핑"],
-          ["카페 · 간식"],
+          "식사",
+          "쇼핑",
+          "카페 · 간식",
           "교통",
-          ["편의점 · 마트"],
+          "편의점 · 마트",
+          "기타",
         ],
         labels: {
           style: {
@@ -74,6 +81,80 @@ const CategoryChart = () => {
     },
   });
 
+  const flId = useRecoilValue(householderIdState);
+
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      const token = localStorage.getItem("token");
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+
+      try {
+        const response = await axios.get(
+          `http://43.201.7.157:8080/history/${flId}/${currentYear}/${currentMonth}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const expenditures = response.data.filter(
+          (item: any) => item.isIncome === "EXPENDITURE"
+        );
+
+        const categoryTotals: { [key: string]: number } = {
+          "식비": 0,
+          "쇼핑": 0,
+          "카페 · 간식": 0,
+          "교통": 0,
+          "편의점 · 마트": 0,
+          "기타": 0,
+        };
+
+        expenditures.forEach((item: any) => {
+          switch (item.category) {
+            case "MEAL":
+              categoryTotals["식비"] += item.amount;
+              break;
+            case "SHOPPING":
+              categoryTotals["쇼핑"] += item.amount;
+              break;
+            case "CAFE_SNACK":
+              categoryTotals["카페 · 간식"] += item.amount;
+              break;
+            case "TRANSPORT":
+              categoryTotals["교통"] += item.amount;
+              break;
+            case "CONVSTORE_MART":
+              categoryTotals["편의점 · 마트"] += item.amount;
+              break;
+            case "ETC":
+              categoryTotals["기타"] += item.amount;
+              break;
+            default:
+              break;
+          }
+        });
+
+        setData((prevData) => ({
+          ...prevData,
+          series: [
+            {
+              data: Object.values(categoryTotals),
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCategoryData();
+  }, [flId]);
+
   return (
     <Wrapper>
       <div style={{ width: "100%", height: "100%" }}>
@@ -83,8 +164,8 @@ const CategoryChart = () => {
             options={data.options}
             series={data.series}
             type="bar"
-            width="100%" // 차트 너비를 부모의 너비에 맞춤
-            height="100%" // 차트 높이를 부모의 높이에 맞춤
+            width="100%"
+            height="100%"
           />
         </ChartContainer>
       </div>
