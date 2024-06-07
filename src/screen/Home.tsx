@@ -122,6 +122,7 @@ const Home = () => {
   const budgetMatch = useMatch("/budget");
   const anaylsisMatch = useMatch("/analysis");
   const navigate = useNavigate();
+
   return (
     <div style={{ overflow: "hidden" }}>
       <Wrapper>
@@ -239,7 +240,7 @@ const Home = () => {
               }}
             >
               <div style={{ display: "flex" }}>
-                <div style={{ marginRight: "15px" }}>
+                <div style={{ marginRight: "15px", cursor: "pointer" }}>
                   <p
                     style={{
                       width: "100%",
@@ -253,7 +254,13 @@ const Home = () => {
                   </p>
                   <p style={{ fontSize: "10px", textAlign: "center" }}>설정</p>
                 </div>
-                <div style={{ marginLeft: "15px" }}>
+                <div
+                  onClick={() => {
+                    navigate("/preview");
+                    localStorage.removeItem("token");
+                  }}
+                  style={{ marginLeft: "15px", cursor: "pointer" }}
+                >
                   <p
                     style={{
                       width: "100%",

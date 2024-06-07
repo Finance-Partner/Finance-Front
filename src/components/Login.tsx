@@ -1,8 +1,10 @@
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
+
 const BigContainer = styled.div`
   display: flex;
   align-items: center;
@@ -49,9 +51,15 @@ const Form = styled.form`
     background-color: ${(props) => props.theme.buttonColor};
   }
 `;
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+`;
 const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues } = useForm<ILoginForm>();
+  const [errorMessage, setErrorMessage] = useState("");
   console.log(localStorage.getItem("token"));
   interface ILoginForm {
     email: string;
@@ -71,12 +79,14 @@ const Login = () => {
         },
       })
       .then((response) => {
+        navigate("/dashboard");
         console.log("Response:", response.data);
-        //save token in recoilToken
         localStorage.setItem("token", response.data.token);
+        setErrorMessage(() => ""); // 로그인 성공 시 에러 메시지 초기화
       })
       .catch((error) => {
         console.error("Error:", error);
+        setErrorMessage(() => "유효하지 않은 로그인입니다"); // 에러 발생 시 에러 메시지 설정
       });
   };
   return (
@@ -86,7 +96,7 @@ const Login = () => {
           <h1
             onClick={() => navigate("/preview")}
             style={{
-              cursor:"pointer",
+              cursor: "pointer",
               width: "100%",
               height: "100%",
               paddingRight: "3vw",
@@ -135,6 +145,7 @@ const Login = () => {
               type="password"
             />
             <button>로그인</button>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </Form>
         </Container>
       </BigContainer>
