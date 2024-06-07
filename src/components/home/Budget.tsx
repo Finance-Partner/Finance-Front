@@ -41,6 +41,7 @@ const Item1 = styled(GridItem1)`
 const Item2 = styled(GridItem1)`
   grid-column: 2 / 3;
   grid-row: 1 / 2;
+  position: relative;
 `;
 
 const Item3 = styled(GridItem2)`
@@ -105,11 +106,34 @@ const StatusText = styled.h4<{ isOverBudget: boolean }>`
   color: ${(props) => (props.isOverBudget ? "#7763F4" : "#1ED8AB")};
 `;
 
+const EditIcon = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #7763f4;
+`;
+
+const Input = styled.input`
+  font-size: 45px;
+  font-weight: bold;
+  color: #1ed8ab;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  text-align: left;
+  padding-left: 0;
+  background: transparent;
+`;
+
 const Budget = () => {
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
   const [currentMonthBudget, setCurrentMonthBudget] = useState(0);
   const [lastMonthSpending, setLastMonthSpending] = useState(0);
   const [lastMonthBudget, setLastMonthBudget] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newBudget, setNewBudget] = useState(currentMonthBudget);
   const flId = useRecoilValue(householderIdState);
 
   useEffect(() => {
@@ -140,6 +164,7 @@ const Budget = () => {
       })
       .then((response) => {
         setCurrentMonthBudget(response.data.budget);
+        setNewBudget(response.data.budget);
       })
       .catch((error) => {
         console.error("Error fetching budget:", error);
@@ -214,6 +239,34 @@ const Budget = () => {
       });
   }, [flId]);
 
+  const handleSaveBudget = () => {
+    const token = localStorage.getItem("token");
+    axios
+      .patch(
+        `http://43.201.7.157:8080/fl`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            flId: flId,
+            budget: newBudget,
+            title: "string", // 필요시 다른 값으로 변경
+          },
+        }
+      )
+      .then(() => {
+        setCurrentMonthBudget(newBudget);
+        setLastMonthBudget(newBudget);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        console.error("Error updating budget:", error);
+      });
+  };
+
   const remainingBudget = currentMonthBudget - currentMonthSpending;
   const overBudget = lastMonthSpending - lastMonthBudget;
 
@@ -231,10 +284,34 @@ const Budget = () => {
       <Item2>
         <div>
           <Title>예산</Title>
-          <Price isIncome={true}>
-            {formatNumberWithCommas(currentMonthBudget)}
-            <span>원</span>
-          </Price>
+          {isEditing ? (
+            <div>
+              <Input
+                type="number"
+                value={newBudget}
+                onChange={(e) => setNewBudget(Number(e.target.value))}
+              />
+              <EditIcon
+                style={{ color: "black" }}
+                className="material-symbols-outlined"
+                onClick={handleSaveBudget}
+              >
+                save
+              </EditIcon>
+            </div>
+          ) : (
+            <Price isIncome={true}>
+              {formatNumberWithCommas(currentMonthBudget)}
+              <span>원</span>
+              <EditIcon
+                style={{ color: "black" }}
+                className="material-symbols-outlined"
+                onClick={() => setIsEditing(true)}
+              >
+                edit
+              </EditIcon>
+            </Price>
+          )}
         </div>
       </Item2>
       <Item3>
@@ -271,7 +348,7 @@ const Budget = () => {
       </Item3>
       <Item4>
         <BottomContainer>
-          <h3>저번 달 예산 결과</h3>
+          <h3>저번 달과 비교</h3>
           <StatusText isOverBudget={overBudget > 0}>
             {overBudget > 0
               ? `${formatNumberWithCommas(overBudget)}원 초과했습니다`
@@ -282,7 +359,7 @@ const Budget = () => {
             budget={lastMonthBudget}
             title="지난 달 예산"
             subtitle={`${lastMonthBudget.toLocaleString()} 원`}
-            color={remainingBudget < 0 ? "#7763F4" : "#1ED8AB"}
+            color={overBudget <= 0 ? "#1ED8AB" : "#7763F4"}
           />
           <p
             style={{
@@ -296,7 +373,7 @@ const Budget = () => {
           >
             {formatNumberWithCommas(currentMonthBudget)}
           </p>
-          <h5>지난 달 예산</h5>
+          <h5>이번 달 예산</h5>
           <h6>{formatNumberWithCommas(lastMonthBudget)} 원</h6>
           <h5>지난 달 지출</h5>
           <h6>{formatNumberWithCommas(lastMonthSpending)} 원</h6>
