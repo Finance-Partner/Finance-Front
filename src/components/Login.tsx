@@ -79,7 +79,7 @@ const Login = () => {
         },
       })
       .then((response) => {
-        navigate("/dashboard");
+        navigate("/home/dashboard");
         console.log("Response:", response.data);
         localStorage.setItem("token", response.data.token);
         setErrorMessage(() => ""); // 로그인 성공 시 에러 메시지 초기화
@@ -94,7 +94,7 @@ const Login = () => {
       <BigContainer>
         <Container style={{ borderRight: "1px solid black" }}>
           <h1
-            onClick={() => navigate("/preview")}
+            onClick={() => navigate("/")}
             style={{
               cursor: "pointer",
               width: "100%",

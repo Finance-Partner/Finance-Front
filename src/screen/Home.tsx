@@ -1,5 +1,7 @@
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { householderIdState } from "../atom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -122,6 +124,11 @@ const Home = () => {
   const budgetMatch = useMatch("/home/budget");
   const anaylsisMatch = useMatch("/home/analysis");
   const navigate = useNavigate();
+  const [householderId, setHouseholderId] = useRecoilState(householderIdState); // Recoil 상태 관리
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHouseholderId(Number(e.target.value)); // 입력 값을 숫자로 변환하여 저장
+  };
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -131,7 +138,6 @@ const Home = () => {
         <ThirdCircle />
         <Container>
           <NavBar>
-            {" "}
             <p
               style={{
                 width: "100%",
@@ -256,7 +262,7 @@ const Home = () => {
                 </div>
                 <div
                   onClick={() => {
-                    navigate("/preview");
+                    navigate("/");
                     localStorage.removeItem("token");
                   }}
                   style={{ marginLeft: "15px", cursor: "pointer" }}
@@ -278,6 +284,13 @@ const Home = () => {
                 </div>
               </div>
             </div>
+            <p>가계부 id입력</p>
+            <input
+              type="number"
+              placeholder="가계부 id입력"
+              value={householderId}
+              onChange={handleInputChange}
+            />
           </NavBar>
           <OutletContainer>
             <Outlet />
