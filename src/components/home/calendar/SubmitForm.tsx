@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 // 타입 정의
 interface RadioLabelProps {
@@ -80,13 +81,21 @@ const Button = styled.button`
 `;
 
 const SubmitForm: React.FC = () => {
+  // 현재 날짜를 ISO 형식의 문자열로 변환
+  const getCurrentDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // 상태 관리
   const [form, setForm] = useState({
-    date: "2024년 5월 23일",
+    date: getCurrentDate(), // 기본 날짜를 현재 날짜로 설정
     amount: "",
     type: "지출",
     category: "",
-    merchant: "",
     memo: "",
   });
 
@@ -106,19 +115,80 @@ const SubmitForm: React.FC = () => {
   // 폼 제출 핸들러
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(form);
+
+    if (!form.amount) {
+      alert("금액을 입력해주세요.");
+      return;
+    }
+
+    if (!form.category) {
+      alert("카테고리를 선택해주세요.");
+      return;
+    }
+
+    const [year, month, day] = form.date.split("-");
+    const amount = parseInt(form.amount);
+    const content = form.memo;
+    const isCategory = form.category;
+    const isIncome = form.type === "수입" ? "INCOME" : "EXPENDITURE";
+
+    const token = localStorage.getItem("token");
+
+    axios
+      .post(`http://43.201.7.157:8080/history`, null, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          flId: 1,
+          year: year,
+          month: month,
+          day: day,
+          amount: amount,
+          content: content,
+          isCategory: isCategory,
+          isIncome: isIncome,
+        },
+      })
+      .then((response) => {
+        alert("추가 완료!");
+        console.log("Data saved successfully:", response.data);
+        // 폼 상태를 초기화
+        setForm({
+          date: getCurrentDate(), // 기본 날짜를 현재 날짜로 재설정
+          amount: "",
+          type: "지출",
+          category: "",
+          memo: "",
+        });
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
   };
 
   return (
     <FormContainer>
       <form onSubmit={handleSubmit}>
         <FormGroup>
-          <div>{form.date}</div>
+          <Label>날짜</Label>
+          <Input
+            type="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+          />
         </FormGroup>
         <FormGroup>
           <Input
             placeholder="0원"
-            style={{ marginBottom: "20%" }}
+            style={{
+              marginBottom: "40%",
+              marginTop: "3%",
+              fontWeight: "bold",
+              fontSize: "30px",
+            }}
             type="number"
             name="amount"
             value={form.amount}
@@ -153,22 +223,15 @@ const SubmitForm: React.FC = () => {
           <Label>카테고리</Label>
           <Select name="category" value={form.category} onChange={handleChange}>
             <option value="">선택하세요</option>
-            <option value="식비">식비</option>
-            <option value="쇼핑">쇼핑</option>
-            <option value="카페">카페</option>
-            <option value="교통">교통</option>
-            <option value="편의점">편의점</option>
+            <option value="SALARY">월급</option>
+            <option value="INTEREST">이자</option>
+            <option value="MEAL">식사</option>
+            <option value="SHOPPING">쇼핑</option>
+            <option value="CAFE_SNACK">카페</option>
+            <option value="TRANSPORT">교통</option>
+            <option value="CONVSTORE_MART">식자제</option>
+            <option value="ETC">기타</option>
           </Select>
-        </FormGroup>
-        <FormGroup>
-          <Label>거래처</Label>
-          <Input
-            placeholder="거래처를 입력해주세요"
-            type="text"
-            name="merchant"
-            value={form.merchant}
-            onChange={handleChange}
-          />
         </FormGroup>
         <FormGroup>
           <Label>메모</Label>
