@@ -78,7 +78,6 @@ const DonutChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-
       // Get current year and month
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();

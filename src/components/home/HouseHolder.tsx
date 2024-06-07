@@ -56,7 +56,7 @@ const HouseHolder = () => {
             내역
           </Btn>
         </div>
-        <SubmitBtn>가계부 작성하기</SubmitBtn> 
+        {/* <SubmitBtn>가계부 작성하기</SubmitBtn>  */}
         {/* 나중에 useOutletContext 사용해서 제출버튼 전송 */}
       </ButtonContainer>
       <OutletContainer>
