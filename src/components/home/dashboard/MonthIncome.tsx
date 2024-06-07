@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import styled from "styled-components";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { householderIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -9,47 +12,101 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const TitleContainer = styled.h1`
   position: relative;
   top: 10px;
   text-align: center;
-  font-size:12px;
+  font-size: 12px;
   font-weight: bold;
   height: 10%;
 `;
+
 const ChartContainer = styled.div`
   position: relative;
   height: 90%;
 `;
+
 const MonthIncome = () => {
-  const [data] = useState({
+  const [data, setData] = useState({
     series: [
       {
         name: "수입",
-        data: [30, 40, 35],
+        data: [] as number[],
       },
     ],
     options: {
       chart: {
-        type: "line" as const, // 문자열 리터럴로 지정
+        type: "line" as const,
         toolbar: {
           show: false,
         },
       },
-      colors: ["#1ED8AB"], // 선 색깔 설정 (예: 주황색)
+      colors: ["#1ED8AB"],
       xaxis: {
-        categories: ["Mar", "Apr", "May"],
+        categories: [] as string[],
       },
       yaxis: {
         labels: {
-          show: false, // y축 레이블 숨기기
+          show: false,
         },
       },
       stroke: {
-        curve: "smooth" as const, // 문자열 리터럴로 지정
+        curve: "smooth" as const,
       },
     },
   });
+
+  const flId = useRecoilValue(householderIdState);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const fetchData = async () => {
+      try {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const last3Months = Array.from({ length: 3 }, (_, i) => {
+          const date = new Date(currentYear, currentMonth - i - 1);
+          return { year: date.getFullYear(), month: date.getMonth() + 1 };
+        }).reverse();
+
+        const incomeData: number[] = [];
+        const categories: string[] = [];
+
+        for (const { year, month } of last3Months) {
+          const response = await axios.get(
+            `http://43.201.7.157:8080/history/${flId}/${year}/${month}`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const income = response.data
+            .filter((item: any) => item.isIncome === "INCOME")
+            .reduce((acc: number, item: any) => acc + item.amount, 0);
+
+          incomeData.push(income);
+          categories.push(`${year}-${month}`);
+        }
+
+        setData((prevData) => ({
+          ...prevData,
+          series: [{ name: "수입", data: incomeData }],
+          options: { ...prevData.options, xaxis: { categories } },
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [flId]);
 
   return (
     <Wrapper>
