@@ -107,13 +107,17 @@ const Detail = () => {
           },
         })
         .then((response) => {
-          setData(response.data);
+          const sortedData = response.data.sort((a: Transaction, b: Transaction) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
+          setData(sortedData);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
     }
   }, [token, flId]);
+  
 
   const handleDelete = (historyId: number) => {
     axios
