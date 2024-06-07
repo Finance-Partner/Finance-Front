@@ -241,7 +241,7 @@ const Budget = () => {
         <BottomContainer>
           <h3>이번 달 예산</h3>
           <StatusText isOverBudget={remainingBudget < 0}>
-            {formatNumberWithCommas(remainingBudget)}원{" "}
+            {formatNumberWithCommas(Math.abs(remainingBudget))}원{" "}
             {remainingBudget < 0 ? "초과했습니다" : "남았습니다"}
           </StatusText>
           <BudgetChart

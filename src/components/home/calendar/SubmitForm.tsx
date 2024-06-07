@@ -230,9 +230,9 @@ const SubmitForm: React.FC = () => {
             <option value="INTEREST">이자</option>
             <option value="MEAL">식사</option>
             <option value="SHOPPING">쇼핑</option>
-            <option value="CAFE_SNACK">카페</option>
+            <option value="CAFE_SNACK">카페 · 간식</option>
             <option value="TRANSPORT">교통</option>
-            <option value="CONVSTORE_MART">식자제</option>
+            <option value="CONVSTORE_MART">편의점 · 마트</option>
             <option value="ETC">기타</option>
           </Select>
         </FormGroup>
