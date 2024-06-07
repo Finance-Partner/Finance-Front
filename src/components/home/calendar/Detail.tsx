@@ -27,19 +27,19 @@ const categoryDisplayNames: { [key: string]: string } = {
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 74vh; /* 고정된 높이 설정 */
   display: flex;
   justify-content: center;
   background-color: white;
   border-radius: 20px;
-  overflow: auto; /* Add this line */
+  overflow: hidden; /* 추가 */
 `;
 
 const Table = styled.table`
-  width: 95%;
+  width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
-  overflow: auto; /* Add this line */
+  overflow: auto; /* 추가 */
 `;
 
 const Th = styled.th`
@@ -92,6 +92,12 @@ const EditSelect = styled.select`
   background-color: white;
   border: none;
   border-bottom: 1px solid black;
+`;
+
+const TableContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* 추가 */
 `;
 
 const Detail = () => {
@@ -195,132 +201,132 @@ const Detail = () => {
   return (
     <>
       <Wrapper>
-        <Table>
-          <thead>
-            <tr>
-              <Th>분류</Th>
-              <Th>날짜</Th>
-              <Th>금액</Th>
-              <Th>카테고리</Th>
-              <Th>작성자</Th>
-              <Th>메모</Th>
-              <Th>수정</Th>
-              <Th>삭제</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <Td>
-                  {editId === item.id ? (
-                    <EditSelect
-                      name="isIncome"
-                      value={editFormData?.isIncome}
-                      onChange={handleEditChange}
-                    >
-                      <option value="INCOME">수입</option>
-                      <option value="EXPENDITURE">지출</option>
-                    </EditSelect>
-                  ) : (
-                    <span
-                      style={{
-                        color:
-                          item.isIncome === "INCOME" ? "#1ED8AB" : "#7763F4",
-                      }}
-                    >
-                      {item.isIncome === "INCOME" ? "수입" : "지출"}
-                    </span>
-                  )}
-                </Td>
-                <Td>
-                  {editId === item.id ? (
-                    <EditInput
-                      type="date"
-                      name="date"
-                      value={editFormData?.date}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    new Date(item.date).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  )}
-                </Td>
-                <Td>
-                  {editId === item.id ? (
-                    <EditInput
-                      type="number"
-                      name="amount"
-                      value={editFormData?.amount}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    `${item.amount.toLocaleString()}원`
-                  )}
-                </Td>
-                <Td>
-                  {editId === item.id ? (
-                    <EditSelect
-                      name="category"
-                      value={editFormData?.category}
-                      onChange={handleEditChange}
-                    >
-                      {Object.entries(categoryDisplayNames).map(
-                        ([key, displayName]) => (
-                          <option key={key} value={key}>
-                            {displayName}
-                          </option>
-                        )
-                      )}
-                    </EditSelect>
-                  ) : (
-                    categoryDisplayNames[item.category]
-                  )}
-                </Td>
-                <Td>김웹소</Td> {/* Static author name as in the example */}
-                <Td>
-                  {editId === item.id ? (
-                    <EditInput
-                      type="text"
-                      name="content"
-                      value={editFormData?.content}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    item.content
-                  )}
-                </Td>
-                <BtnTd>
-                  {editId === item.id ? (
-                    <Button
-                      className="material-symbols-outlined"
-                      onClick={handleSave}
-                    >
-                      save
-                    </Button>
-                  ) : (
-                    <Button
-                      className="material-symbols-outlined"
-                      onClick={() => handleEdit(item)}
-                    >
-                      edit
-                    </Button>
-                  )}
-                </BtnTd>
-                <BtnTd>
-                  <Button
-                    onClick={() => handleDelete(item.id)}
-                    className="material-symbols-outlined"
-                  >
-                    delete
-                  </Button>
-                </BtnTd>
+        <TableContainer>
+          <Table>
+            <thead>
+              <tr>
+                <Th>분류</Th>
+                <Th>날짜</Th>
+                <Th>금액</Th>
+                <Th>카테고리</Th>
+                <Th>메모</Th>
+                <Th>수정</Th>
+                <Th>삭제</Th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <Td>
+                    {editId === item.id ? (
+                      <EditSelect
+                        name="isIncome"
+                        value={editFormData?.isIncome}
+                        onChange={handleEditChange}
+                      >
+                        <option value="INCOME">수입</option>
+                        <option value="EXPENDITURE">지출</option>
+                      </EditSelect>
+                    ) : (
+                      <span
+                        style={{
+                          color:
+                            item.isIncome === "INCOME" ? "#1ED8AB" : "#7763F4",
+                        }}
+                      >
+                        {item.isIncome === "INCOME" ? "수입" : "지출"}
+                      </span>
+                    )}
+                  </Td>
+                  <Td>
+                    {editId === item.id ? (
+                      <EditInput
+                        type="date"
+                        name="date"
+                        value={editFormData?.date}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      new Date(item.date).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    )}
+                  </Td>
+                  <Td>
+                    {editId === item.id ? (
+                      <EditInput
+                        type="number"
+                        name="amount"
+                        value={editFormData?.amount}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      `${item.amount.toLocaleString()}원`
+                    )}
+                  </Td>
+                  <Td>
+                    {editId === item.id ? (
+                      <EditSelect
+                        name="category"
+                        value={editFormData?.category}
+                        onChange={handleEditChange}
+                      >
+                        {Object.entries(categoryDisplayNames).map(
+                          ([key, displayName]) => (
+                            <option key={key} value={key}>
+                              {displayName}
+                            </option>
+                          )
+                        )}
+                      </EditSelect>
+                    ) : (
+                      categoryDisplayNames[item.category]
+                    )}
+                  </Td>
+                  <Td>
+                    {editId === item.id ? (
+                      <EditInput
+                        type="text"
+                        name="content"
+                        value={editFormData?.content}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      item.content
+                    )}
+                  </Td>
+                  <BtnTd>
+                    {editId === item.id ? (
+                      <Button
+                        className="material-symbols-outlined"
+                        onClick={handleSave}
+                      >
+                        save
+                      </Button>
+                    ) : (
+                      <Button
+                        className="material-symbols-outlined"
+                        onClick={() => handleEdit(item)}
+                      >
+                        edit
+                      </Button>
+                    )}
+                  </BtnTd>
+                  <BtnTd>
+                    <Button
+                      onClick={() => handleDelete(item.id)}
+                      className="material-symbols-outlined"
+                    >
+                      delete
+                    </Button>
+                  </BtnTd>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableContainer>
       </Wrapper>
     </>
   );
