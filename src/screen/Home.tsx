@@ -256,7 +256,7 @@ const Home = () => {
                 </div>
                 <div
                   onClick={() => {
-                    navigate("/preview");
+                    navigate("/");
                     localStorage.removeItem("token");
                   }}
                   style={{ marginLeft: "15px", cursor: "pointer" }}

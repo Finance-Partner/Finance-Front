@@ -89,7 +89,7 @@ const Main = () => {
       </MoveToTopBtn>
       <NavBar>
         <div
-          onClick={() => navigate("/preview")}
+          onClick={() => navigate("/")}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         >
           <NavTitleLogo className="material-symbols-outlined">

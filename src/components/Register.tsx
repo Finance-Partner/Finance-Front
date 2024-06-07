@@ -180,7 +180,7 @@ const Register = () => {
       localStorage.setItem("token", loginResponse.data.token);
 
       // 대시보드로 이동
-      navigate("/dashboard");
+      navigate("/home/dashboard");
       setErrorMessage(""); // 에러 메시지 초기화
     } catch (error) {
       console.error("Error:", error);
@@ -195,7 +195,7 @@ const Register = () => {
       <BigContainer>
         <Container style={{ borderRight: "1px solid black" }}>
           <h1
-            onClick={() => navigate("/preview")}
+            onClick={() => navigate("/")}
             style={{
               cursor: "pointer",
               width: "100%",
