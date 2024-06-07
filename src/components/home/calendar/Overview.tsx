@@ -1,7 +1,11 @@
 import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ReactCalendar from "./ReactCalendar";
 import SubmitForm from "./SubmitForm";
 import { formatNumberWithCommas } from "../../utils";
+import { useRecoilValue } from "recoil";
+import { householderIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -56,7 +60,47 @@ const Price = styled.p<{ isIncome: boolean }>`
     font-size: 20px;
   }
 `;
+
 const Overview = () => {
+  const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
+  const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
+  const flId = useRecoilValue(householderIdState);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    // Get current year and month
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // Months are zero-based
+
+    // Fetch current month transactions
+    axios
+      .get(`http://43.201.7.157:8080/history/${flId}/${currentYear}/${currentMonth}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const income = response.data
+          .filter((item: any) => item.isIncome === "INCOME")
+          .reduce((acc: number, item: any) => acc + item.amount, 0);
+
+        const spending = response.data
+          .filter((item: any) => item.isIncome === "EXPENDITURE")
+          .reduce((acc: number, item: any) => acc + item.amount, 0);
+
+        setCurrentMonthIncome(income);
+        setCurrentMonthSpending(spending);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [flId]);
+
+  const currentMonthBalance = currentMonthIncome - currentMonthSpending;
+
   return (
     <>
       <Wrapper>
@@ -64,7 +108,8 @@ const Overview = () => {
           <div>
             <Title>이번 달 수입</Title>
             <Price isIncome={true}>
-              {formatNumberWithCommas(820000)}<span>원</span>
+              {formatNumberWithCommas(currentMonthIncome)}
+              <span>원</span>
             </Price>
           </div>
         </Item1>
@@ -72,15 +117,18 @@ const Overview = () => {
           <div>
             <Title>이번 달 지출</Title>
             <Price isIncome={false}>
-            {formatNumberWithCommas(450000)}<span>원</span>
+              {formatNumberWithCommas(currentMonthSpending)}
+              <span>원</span>
             </Price>
           </div>
         </Item2>
         <Item3>
           <div>
             <Title>이번 달 정산</Title>
-            <Price isIncome={true}>
-              +{formatNumberWithCommas(320000)}<span>원</span>
+            <Price isIncome={currentMonthBalance >= 0}>
+              {currentMonthBalance >= 0 ? "+" : ""}
+              {formatNumberWithCommas(currentMonthBalance)}
+              <span>원</span>
             </Price>
           </div>
         </Item3>
@@ -94,4 +142,5 @@ const Overview = () => {
     </>
   );
 };
+
 export default Overview;
