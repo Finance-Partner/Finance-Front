@@ -6,6 +6,26 @@ import SubmitForm from "./SubmitForm";
 import { formatNumberWithCommas } from "../../utils";
 import { useRecoilValue } from "recoil";
 import { householderIdState } from "../../../atom";
+import {Transaction, Transactions} from "./types";
+
+
+
+const processTransactions = (transactions: Transaction[]): Transactions => {
+  const processed: Transactions = {};
+
+  transactions.forEach(({date, amount, isIncome}) => {
+    if(!processed[date]) {
+      processed[date] = {income:0, expense:0};
+    }
+    if (isIncome === 'INCOME') {
+      processed[date].income += amount;
+    } else {
+      processed[date].expense += amount;
+    }
+  });
+
+  return processed;
+}
 
 const Wrapper = styled.div`
   display: grid;
@@ -64,6 +84,7 @@ const Price = styled.p<{ isIncome: boolean }>`
 const Overview = () => {
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const flId = useRecoilValue(householderIdState);
 
   useEffect(() => {
@@ -93,13 +114,15 @@ const Overview = () => {
 
         setCurrentMonthIncome(income);
         setCurrentMonthSpending(spending);
+        setTransactions(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [flId]);
+  }, [flId, transactions]);
 
   const currentMonthBalance = currentMonthIncome - currentMonthSpending;
+  const processedTransactions = processTransactions(transactions);
 
   return (
     <>
@@ -133,7 +156,7 @@ const Overview = () => {
           </div>
         </Item3>
         <Item4>
-          <ReactCalendar />
+          <ReactCalendar transactions={processedTransactions} />
         </Item4>
         <Item5>
           <SubmitForm />
