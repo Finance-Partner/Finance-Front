@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { formatNumberWithCommas } from "../../utils";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Income = styled.h1`
 
 const FixIncome = () => {
   const [fixedIncome, setFixedIncome] = useState(0);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const fetchFixedIncome = async () => {

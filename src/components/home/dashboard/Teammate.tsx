@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ const Img = styled.img`
 const Teammate = () => {
   const [teamSize, setTeamSize] = useState(0);
   const [userImages, setUserImages] = useState<string[]>([]);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const fetchTeamData = async () => {

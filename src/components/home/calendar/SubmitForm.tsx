@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 // 타입 정의
 interface RadioLabelProps {
@@ -84,7 +84,7 @@ const Button = styled.button`
 
 const SubmitForm: React.FC = () => {
   // 현재 날짜를 ISO 형식의 문자열로 변환
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
   const getCurrentDate = () => {
     const date = new Date();
     const year = date.getFullYear();

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 // Define the expected data type
 interface Transaction {
@@ -104,7 +104,7 @@ const Detail = () => {
   const [data, setData] = useState<Transaction[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<Transaction | null>(null);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
   const token = localStorage.getItem("token");
 
   useEffect(() => {

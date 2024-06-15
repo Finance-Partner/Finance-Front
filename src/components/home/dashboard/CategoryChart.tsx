@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -81,7 +81,7 @@ const CategoryChart = () => {
     },
   });
 
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const fetchCategoryData = async () => {
