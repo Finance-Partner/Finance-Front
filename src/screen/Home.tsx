@@ -275,7 +275,7 @@ const Home = () => {
 
   const [newBudget, setNewBudget] = useState(0);
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState); 
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [myFlLists, setMyFlLists] = useRecoilState(myFlListsState);
   const [selectedLedgerId, setSelectedLedgerId] = useRecoilState(
     selectedLedgerIdState
@@ -422,6 +422,51 @@ const Home = () => {
           console.error("Error fetching data:", error);
         });
     }
+  };
+
+  const updateProfile = async (name: string, password: string) => {
+    try {
+      await axios.patch(
+        "http://43.201.7.157:8080/user",
+        { name, password },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Profile updated successfully");
+      // 프로필 정보가 업데이트된 후에 필요한 추가 작업 수행
+      // 예: 사용자 정보 다시 불러오기
+      getUserInfo();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
+  const uploadProfilePhoto = async (img: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("img", img);
+
+      await axios.post(`http://43.201.7.157:8080/photo`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Profile photo uploaded successfully");
+      // 프로필 사진 업로드 후에 필요한 추가 작업 수행
+      // 예: 사용자 정보 다시 불러오기
+      getUserInfo();
+    } catch (error) {
+      console.error("Error uploading profile photo:", error);
+    }
+  };
+
+  
   useEffect(() => {
     getUserInfo();
   }, [token, setMyFlLists, setSelectedLedgerId]);
@@ -519,7 +564,10 @@ const Home = () => {
               </IconContaienr>
             </DoubleIconContainer>
             <UserContainer>
-              <UserImg src={userInfo?.photo != null ? userInfo.photo : ""} alt="프로필 이미지"/>
+              <UserImg
+                src={userInfo?.photo != null ? userInfo.photo : ""}
+                alt="프로필 이미지"
+              />
             </UserContainer>
             <p
               style={{
@@ -533,16 +581,16 @@ const Home = () => {
               {userInfo?.name}
             </p>
             <AddManageContainer>
-            <div
-              style={{
-                marginTop: "5px",
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  marginTop: "5px",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div style={{ display: "flex" }}>
                   <div
                     style={{ marginRight: "15px", cursor: "pointer" }}
                     onClick={() => {
@@ -550,43 +598,67 @@ const Home = () => {
                       setModalType("setting");
                     }}
                   >
-                  <p
-                    style={{
-                      width: "100%",
-                      textAlign: "center",
-                      color: "#7B7F85",
-                      fontSize: "32px",
+                    <p
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#7B7F85",
+                        fontSize: "32px",
+                      }}
+                      className="material-symbols-outlined"
+                    >
+                      settings
+                    </p>
+                    <p style={{ fontSize: "10px", textAlign: "center" }}>
+                      설정
+                    </p>
+                  </div>
+                  <div
+                    style={{ marginRight: "15px", cursor: "pointer" }}
+                    onClick={() => {
+                      setShowModal(true);
+                      setModalType("createFl");
                     }}
-                    className="material-symbols-outlined"
                   >
-                    settings
-                  </p>
-                  <p style={{ fontSize: "10px", textAlign: "center" }}>설정</p>
-                </div>
-                <div
-                  onClick={() => {
-                    navigate("/");
-                    localStorage.removeItem("token");
-                  }}
+                    <p
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#7B7F85",
+                        fontSize: "32px",
+                      }}
+                      className="material-symbols-outlined"
+                    >
+                      add
+                    </p>
+                    <p style={{ fontSize: "10px", textAlign: "center" }}>
+                      가계부 생성
+                    </p>
+                  </div>
+                  <div
+                    onClick={() => {
+                      navigate("/");
+                      localStorage.removeItem("token");
+                    }}
                     style={{ cursor: "pointer" }}
-                >
-                  <p
-                    style={{
-                      width: "100%",
-                      textAlign: "center",
-                      color: "#7B7F85",
-                      fontSize: "32px",
-                    }}
-                    className="material-symbols-outlined"
                   >
-                    logout
-                  </p>
-                  <p style={{ fontSize: "10px", textAlign: "center" }}>
-                    로그아웃
-                  </p>
+                    <p
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#7B7F85",
+                        fontSize: "32px",
+                      }}
+                      className="material-symbols-outlined"
+                    >
+                      logout
+                    </p>
+                    <p style={{ fontSize: "10px", textAlign: "center" }}>
+                      로그아웃
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
             </AddManageContainer>
 
             <LedgerNav>
