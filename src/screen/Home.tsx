@@ -316,12 +316,14 @@ const Home = () => {
       return null;
     }
 
-    const endIndex = (startIndex + 2) % myFlLists.length;
-    const indicesToShow = [
-      startIndex,
-      (startIndex + 1) % myFlLists.length,
-      (startIndex + 2) % myFlLists.length,
-    ];
+    const endIndex = Math.min(myFlLists.length, 3);
+    const indicesToShow = Array.from({ length: endIndex }, (_, i) => (startIndex + i) % myFlLists.length);
+
+    // const indicesToShow = [
+    //   startIndex,
+    //   (startIndex + 1) % myFlLists.length,
+    //   (startIndex + 2) % myFlLists.length,
+    // ];
 
     return indicesToShow.map((index) => (
       <CircleBtn
@@ -365,7 +367,7 @@ const Home = () => {
     e.preventDefault();
 
     if (newUserName && newPwd && newPwd === chkNewPwd) {
-      await updateProfile(newUserName, newPwd);
+      const updateResponse = await updateProfile(newUserName, newPwd);
 
       if (file) {
         await uploadProfilePhoto(file);
@@ -466,7 +468,7 @@ const Home = () => {
     }
   };
 
-  
+
   useEffect(() => {
     getUserInfo();
   }, [token, setMyFlLists, setSelectedLedgerId]);
