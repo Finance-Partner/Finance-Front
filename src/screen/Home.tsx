@@ -1,7 +1,9 @@
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 import styled from "styled-components";
-import { householderIdState } from "../atom";
+import { householderIdState, ledgerListState, selectedLedgerIdState } from "../atom";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -118,6 +120,58 @@ const UserImg = styled.img`
   border-radius: 50%;
   background-color: black;
 `;
+
+const LedgerNav = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+
+const ArrowBtn = styled.div`
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+const CircleBtn = styled.div<{ isSelected: boolean }>`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: ${(props) => (props.isSelected ? "#8B0000" : "#D2691E")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+`;
+
+const AddManageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 15px;
+`;
+
+const AddManageBtn = styled.div`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #ccc;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
 const Home = () => {
   const dashboardMatch = useMatch("/home/dashboard");
   const householderdMatch = useMatch("/home/householder/:select");
@@ -125,10 +179,49 @@ const Home = () => {
   const anaylsisMatch = useMatch("/home/analysis");
   const navigate = useNavigate();
   const [householderId, setHouseholderId] = useRecoilState(householderIdState); // Recoil 상태 관리
+  const token = localStorage.getItem("token");
+  const [ledgerList, setLedgerList] = useRecoilState(ledgerListState);
+  const [selectedLedgerId, setSelectedLedgerId] = useRecoilState(selectedLedgerIdState);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHouseholderId(Number(e.target.value)); // 입력 값을 숫자로 변환하여 저장
   };
+
+  const handlePrev = () => {
+    if (ledgerList.length === 0) return;
+    const currentIndex = ledgerList.indexOf(selectedLedgerId!);
+    const prevIndex = (currentIndex - 1 + ledgerList.length) % ledgerList.length;
+    setSelectedLedgerId(ledgerList[prevIndex]);
+  }
+
+  const handleNext = () => {
+    if (ledgerList.length === 0) return;
+    const currentIndex = ledgerList.indexOf(selectedLedgerId!);
+    const nextIndex = (currentIndex + 1) % ledgerList.length;
+    setSelectedLedgerId(ledgerList[nextIndex]);
+  }
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get(`http://43.201.7.157:8080/user`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          setLedgerList(data.myFlLists);
+          setSelectedLedgerId(data.myFlLists[0] || null);
+
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [token, setLedgerList, setSelectedLedgerId]);
 
   return (
     <div style={{ overflow: "hidden" }}>
@@ -284,13 +377,31 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <p>가계부 id입력</p>
+            <LedgerNav>
+              <ArrowBtn onClick={handlePrev}>&lt;</ArrowBtn>
+              {ledgerList.slice(0, 3).map((ledgerId) => (
+                <CircleBtn
+                  key={ledgerId.toString()}
+                  isSelected={ledgerId === selectedLedgerId}
+                  onClick={() => setSelectedLedgerId(ledgerId)}
+                >
+                </CircleBtn>
+              ))}
+              <ArrowBtn onClick={handleNext}>&gt;</ArrowBtn>
+            </LedgerNav>
+            <AddManageContainer>
+              <AddManageBtn>+</AddManageBtn>
+              <AddManageBtn>⚙</AddManageBtn>
+            </AddManageContainer>
+
+
+            {/* <p>가계부 id입력</p>
             <input
               type="number"
               placeholder="가계부 id입력"
               value={householderId}
               onChange={handleInputChange}
-            />
+            /> */}
           </NavBar>
           <OutletContainer>
             <Outlet />
