@@ -365,7 +365,7 @@ const Home = () => {
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log(newUserName, newPwd, chkNewPwd);
     if (newUserName && newPwd && newPwd === chkNewPwd) {
       const updateResponse = await updateProfile(newUserName, newPwd);
 
@@ -428,17 +428,21 @@ const Home = () => {
 
   const updateProfile = async (name: string, password: string) => {
     try {
-      await axios.patch(
-        "http://43.201.7.157:8080/user",
-        { name, password },
+      const response = await axios.patch(
+        `http://43.201.7.157:8080/user`,
+        {},
         {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            name: name,
+            password: password,
+          },
         }
       );
-      console.log("Profile updated successfully");
+      console.log("Server response:", response.data);
       // 프로필 정보가 업데이트된 후에 필요한 추가 작업 수행
       // 예: 사용자 정보 다시 불러오기
       getUserInfo();
@@ -471,7 +475,13 @@ const Home = () => {
 
   useEffect(() => {
     getUserInfo();
-  }, [token, setMyFlLists, setSelectedLedgerId]);
+  }, [token]);
+
+  useEffect(() => {
+    if (myFlLists.length > 0) {
+      setSelectedLedgerId(myFlLists[0].id);
+    }
+  }, [myFlLists]);
 
   return (
     <div style={{ overflow: "hidden" }}>
