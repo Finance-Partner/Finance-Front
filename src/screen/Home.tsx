@@ -1,8 +1,9 @@
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { householderIdState, ledgerListState, selectedLedgerIdState } from "../atom";
+import { householderIdState, ledgerListState, selectedLedgerIdState, userInfoState } from "../atom";
 import { useEffect } from "react";
 
 const Wrapper = styled.div`
@@ -180,8 +181,10 @@ const Home = () => {
   const navigate = useNavigate();
   const [householderId, setHouseholderId] = useRecoilState(householderIdState); // Recoil 상태 관리
   const token = localStorage.getItem("token");
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState); 
   const [ledgerList, setLedgerList] = useRecoilState(ledgerListState);
   const [selectedLedgerId, setSelectedLedgerId] = useRecoilState(selectedLedgerIdState);
+  const [startIndex, setStartIndex] = useState(0);
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,17 +193,44 @@ const Home = () => {
 
   const handlePrev = () => {
     if (ledgerList.length === 0) return;
-    const currentIndex = ledgerList.indexOf(selectedLedgerId!);
-    const prevIndex = (currentIndex - 1 + ledgerList.length) % ledgerList.length;
-    setSelectedLedgerId(ledgerList[prevIndex]);
+    // const currentIndex = ledgerList.indexOf(selectedLedgerId!);
+    // const prevIndex = (currentIndex - 1 + ledgerList.length) % ledgerList.length;
+    // setSelectedLedgerId(ledgerList[prevIndex]);
+    const newIndex = (startIndex - 1 + ledgerList.length) % ledgerList.length;
+    setStartIndex(newIndex);
   }
 
   const handleNext = () => {
     if (ledgerList.length === 0) return;
-    const currentIndex = ledgerList.indexOf(selectedLedgerId!);
-    const nextIndex = (currentIndex + 1) % ledgerList.length;
-    setSelectedLedgerId(ledgerList[nextIndex]);
+    // const currentIndex = ledgerList.indexOf(selectedLedgerId!);
+    // const nextIndex = (currentIndex + 1) % ledgerList.length;
+    // setSelectedLedgerId(ledgerList[nextIndex]);
+    const newIndex = (startIndex + 1) % ledgerList.length;
+    setStartIndex(newIndex);
   }
+
+  // 리스트를 원형 큐처럼 관리하여 보여주는 부분
+  const renderLedgerButtons = () => {
+    // startIndex를 기준으로 리스트를 잘라서 보여줌
+    // 예를 들어 startIndex가 3이고 ledgerList의 길이가 5라면,
+    // [3, 4, 0]을 보여주어야 함
+    if(!ledgerList || ledgerList.length === 0) {
+      return null;
+    }
+
+    const endIndex = (startIndex + 2) % ledgerList.length;
+    const indicesToShow = [startIndex, (startIndex + 1) % ledgerList.length, (startIndex + 2) % ledgerList.length];
+
+    return indicesToShow.map((index) => (
+      <CircleBtn
+        key={ledgerList[index].toString()}
+        isSelected={ledgerList[index] === selectedLedgerId}
+        onClick={() => setSelectedLedgerId(ledgerList[index])}
+      >
+        {ledgerList[index]}
+      </CircleBtn>
+    ));
+  };
 
   useEffect(() => {
     if (token) {
@@ -215,6 +245,7 @@ const Home = () => {
           const data = response.data;
           setLedgerList(data.myFlLists);
           setSelectedLedgerId(data.myFlLists[0] || null);
+          setUserInfo({name: data.name, photo: data.photo});
 
         })
         .catch((error) => {
@@ -316,7 +347,7 @@ const Home = () => {
               </IconContaienr>
             </DoubleIconContainer>
             <UserContainer>
-              <UserImg />
+              <UserImg src={userInfo?.photo != null ? userInfo.photo : ""} alt="프로필 이미지"/>
             </UserContainer>
             <p
               style={{
@@ -327,7 +358,7 @@ const Home = () => {
                 marginTop: "5px",
               }}
             >
-              김웹소
+              {userInfo?.name}
             </p>
             <div
               style={{
@@ -379,19 +410,47 @@ const Home = () => {
             </div>
             <LedgerNav>
               <ArrowBtn onClick={handlePrev}>&lt;</ArrowBtn>
-              {ledgerList.slice(0, 3).map((ledgerId) => (
+              {/* {ledgerList.slice(startIndex, startIndex + 3).map((ledgerId) => (
                 <CircleBtn
                   key={ledgerId.toString()}
                   isSelected={ledgerId === selectedLedgerId}
                   onClick={() => setSelectedLedgerId(ledgerId)}
                 >
+                  {ledgerId}
                 </CircleBtn>
-              ))}
+              ))} */}
+              {renderLedgerButtons()}
               <ArrowBtn onClick={handleNext}>&gt;</ArrowBtn>
             </LedgerNav>
             <AddManageContainer>
-              <AddManageBtn>+</AddManageBtn>
-              <AddManageBtn>⚙</AddManageBtn>
+            <div style={{ marginRight: "15px", cursor: "pointer" }}>
+                  <p
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#7B7F85",
+                      fontSize: "32px",
+                    }}
+                    className="material-symbols-outlined"
+                  >
+                    add
+                  </p>
+                  <p style={{ fontSize: "10px", textAlign: "center" }}>가계부 생성</p>
+                </div>
+                <div style={{ marginRight: "15px", cursor: "pointer" }}>
+                  <p
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#7B7F85",
+                      fontSize: "32px",
+                    }}
+                    className="material-symbols-outlined"
+                  >
+                    settings
+                  </p>
+                  <p style={{ fontSize: "10px", textAlign: "center" }}>가계부 관리</p>
+                </div>
             </AddManageContainer>
 
 
