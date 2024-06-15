@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
@@ -61,7 +61,7 @@ const DonutChart = () => {
     },
   });
 
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   const getLabel = () => {
     const [income, expenses] = data.series;

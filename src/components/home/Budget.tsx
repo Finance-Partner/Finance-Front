@@ -4,7 +4,7 @@ import axios from "axios";
 import BudgetChart from "./budget/BudgetChart";
 import { formatNumberWithCommas } from "../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../atom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -139,7 +139,7 @@ const Budget = () => {
   const [lastMonthBudget, setLastMonthBudget] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [newBudget, setNewBudget] = useState(currentMonthBudget);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
@@ -59,7 +59,7 @@ interface Transaction {
 
 const DashHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const fetchData = async () => {

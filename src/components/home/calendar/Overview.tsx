@@ -5,7 +5,7 @@ import ReactCalendar from "./ReactCalendar";
 import SubmitForm from "./SubmitForm";
 import { formatNumberWithCommas } from "../../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 import {Transaction, Transactions} from "./types";
 
 
@@ -85,7 +85,7 @@ const Overview = () => {
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

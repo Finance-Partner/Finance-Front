@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState } from "../../../atom";
+import { householderIdState, selectedLedgerIdState } from "../../../atom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -57,7 +57,7 @@ const MonthIncome = () => {
     },
   });
 
-  const flId = useRecoilValue(householderIdState);
+  const flId = useRecoilValue(selectedLedgerIdState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
