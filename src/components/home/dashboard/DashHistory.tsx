@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
@@ -59,14 +59,14 @@ interface Transaction {
 
 const DashHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get<Transaction[]>(
-          `http://43.201.7.157:8080/history/${flId}`,
+          `http://43.201.7.157:8080/history/${flId.id}`,
           {
             headers: {
               Accept: "application/json",

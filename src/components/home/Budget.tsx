@@ -4,7 +4,7 @@ import axios from "axios";
 import BudgetChart from "./budget/BudgetChart";
 import { formatNumberWithCommas } from "../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../atom";
+import { householderIdState, selectedLedgerState } from "../../atom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -139,7 +139,7 @@ const Budget = () => {
   const [lastMonthBudget, setLastMonthBudget] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [newBudget, setNewBudget] = useState(currentMonthBudget);
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -164,7 +164,7 @@ const Budget = () => {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          flId: flId,
+          flId: flId.id,
         },
       })
       .then((response) => {
@@ -178,7 +178,7 @@ const Budget = () => {
     // Fetch current month spending
     axios
       .get(
-        `http://43.201.7.157:8080/history/${flId}/${currentYear}/${currentMonth}`,
+        `http://43.201.7.157:8080/history/${flId.id}/${currentYear}/${currentMonth}`,
         {
           headers: {
             Accept: "application/json",
@@ -208,7 +208,7 @@ const Budget = () => {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          flId: flId,
+          flId: flId.id,
         },
       })
       .then((response) => {
@@ -221,7 +221,7 @@ const Budget = () => {
     // Fetch last month spending
     axios
       .get(
-        `http://43.201.7.157:8080/history/${flId}/${lastMonthYear}/${lastMonth}`,
+        `http://43.201.7.157:8080/history/${flId.id}/${lastMonthYear}/${lastMonth}`,
         {
           headers: {
             Accept: "application/json",
@@ -256,7 +256,7 @@ const Budget = () => {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            flId: flId,
+            flId: flId.id,
             budget: newBudget,
             title: "string", // 필요시 다른 값으로 변경
           },

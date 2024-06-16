@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 import { formatNumberWithCommas } from "../../utils";
 
 const Wrapper = styled.div`
@@ -61,7 +61,7 @@ const DonutChart = () => {
     },
   });
 
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   const getLabel = () => {
     const [income, expenses] = data.series;
@@ -85,7 +85,7 @@ const DonutChart = () => {
 
       try {
         const response = await axios.get(
-          `http://43.201.7.157:8080/history/${flId}/${currentYear}/${currentMonth}`,
+          `http://43.201.7.157:8080/history/${flId.id}/${currentYear}/${currentMonth}`,
           {
             headers: {
               Accept: "application/json",

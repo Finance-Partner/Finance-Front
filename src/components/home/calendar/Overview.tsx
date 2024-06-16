@@ -5,7 +5,7 @@ import ReactCalendar from "./ReactCalendar";
 import SubmitForm from "./SubmitForm";
 import { formatNumberWithCommas } from "../../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 import {Transaction, Transactions} from "./types";
 
 
@@ -85,7 +85,7 @@ const Overview = () => {
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -97,7 +97,7 @@ const Overview = () => {
 
     // Fetch current month transactions
     axios
-      .get(`http://43.201.7.157:8080/history/${flId}/${currentYear}/${currentMonth}`, {
+      .get(`http://43.201.7.157:8080/history/${flId.id}/${currentYear}/${currentMonth}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

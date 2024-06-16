@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -57,7 +57,7 @@ const MonthExpense = () => {
     },
   });
 
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -78,7 +78,7 @@ const MonthExpense = () => {
 
         for (const { year, month } of last3Months) {
           const response = await axios.get(
-            `http://43.201.7.157:8080/history/${flId}/${year}/${month}`,
+            `http://43.201.7.157:8080/history/${flId.id}/${year}/${month}`,
             {
               headers: {
                 Accept: "application/json",

@@ -37,10 +37,18 @@ export const invitedListsState = atom<Ledger[]>({
   default: [],
 });
 
-export const selectedLedgerIdState = atom<number | null>({
+export const selectedLedgerState = atom<Ledger>({
   key: "selectedLedgerIdState",
-  default: null,
+  default: {
+    id: 0,
+    name: "",
+  },
 });
+
+export const myManageFlListsState = atom<Ledger[]>({
+  key: "myManageFlListsState",
+  default: [],
+})
 
 
 export const userInfoState = atom<userInfoType | null>({
