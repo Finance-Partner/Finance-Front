@@ -2,7 +2,9 @@ import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { selectedLedgerState } from "../../atom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import InviteUserForm from "./InviteUserForm";
+import axios from "axios";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -78,23 +80,19 @@ const ModalContent = styled.div`
   overflow-y: auto;
 `;
 
-const ModalTitle = styled.h2`
-  margin-bottom: 20px;
-`;
 
-const Input = styled.input`
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  -webkit-appearance: none; /* Remove number input arrow on Chrome/Safari */
-  -moz-appearance: textfield; /* Remove number input arrow on Firefox */
-`;
+interface TeammateInfo {
+  userId: number;
+  name: string;
+  photo: string;
+  head: boolean;
+}
 
 const HouseHolder = () => {
   const navigate = useNavigate();
   const overviewMatch = useMatch("/home/householder/overview");
   const detaildMatch = useMatch("/home/householder/detail");
+  const [flUserInfo, setFlUserInfo] = useState<TeammateInfo[]>([]);
 
   // 유저 초대 관련 상태
   const [inviteEmail, setInviteEmail] = useState("");
@@ -102,6 +100,31 @@ const HouseHolder = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [fl, setFl] = useRecoilState(selectedLedgerState);
+
+  useEffect(() => {
+    const fetchTeamData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(
+          `http://43.201.7.157:8080/fl/users`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              flId: fl.id,
+            },
+          }
+        );
+        setFlUserInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching team data:", error);
+      }
+    };
+
+    fetchTeamData();
+  }, [fl]);
   return (
     <Wrapper>
       <ButtonContainer>
@@ -190,18 +213,11 @@ const HouseHolder = () => {
       </OutletContainer>
       <ModalOverlay show={showModal}>
         <ModalContent>
-          <ModalTitle>
-            멤버 초대하기 - "{fl.name}" 가계부
-            <hr />
-          </ModalTitle>
-          <Input
-            type="email"
-            value={inviteEmail}
-            placeholder="초대할 유저의 이메일을 입력하세요"
-            onChange={(e) => setInviteEmail(e.target.value)}
+            <InviteUserForm
+              showModal={showModal}
+              modalType={modalType}
+              flUserInfo={flUserInfo}
             />
-            <AddButton>초대</AddButton>
-
         </ModalContent>
       </ModalOverlay>
     </Wrapper>

@@ -4,6 +4,7 @@ import ProfileForm from "./ProfileForm";
 import CreateLedgerForm from "./CreateLedgerForm";
 import { Ledger } from "../../atom";
 import EditLedgerForm from "./EditLedgerForm";
+import InviteUserForm from "./InviteUserForm";
 
 const ModalOverlay = styled.div<{ show: boolean }>`
   display: ${({ show }) => (show ? "flex" : "none")};
@@ -78,19 +79,19 @@ const Modal: React.FC<ModalProps> = ({
   handleFileChange,
   getUserInfo,
 }) => {
-
   return (
     <ModalOverlay show={showModal}>
       <ModalContent>
-        {modalType === "createFl" ? (
+        {modalType === "createFl" && (
           <>
             <ModalTitle>가계부 생성</ModalTitle>
-            <CreateLedgerForm 
+            <CreateLedgerForm
               getUserInfo={getUserInfo}
               setShowModal={setShowModal}
             />
           </>
-        ) : (
+        )}
+        {modalType === "setting" && (
           <>
             <TabContainer>
               <TabButton
@@ -112,7 +113,7 @@ const Modal: React.FC<ModalProps> = ({
                 setShowModal={setShowModal}
               />
             ) : (
-              <ProfileForm 
+              <ProfileForm
                 newUserName={newUserName}
                 setNewUserName={setNewUserName}
                 newPwd={newPwd}

@@ -207,12 +207,7 @@ const Register = () => {
               alignItems: "center",
             }}
           >
-            <img
-              src={logo}
-              style={{ fontSize: "80px", marginRight: "20px" }}
-              className="material-symbols-outlined"
-            >
-            </img>
+            <img src={logo} alt="" style={{marginRight:"10px", width:"100px"}}/>
             <p style={{ fontSize: "50px" }}>
               MOAYO
             </p>
