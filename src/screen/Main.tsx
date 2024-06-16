@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import image from "../img/mainimage.png";
+import logo from "../img/moayoLogo2.png";
 
 const NavBar = styled.nav`
   display: flex;
@@ -92,14 +93,13 @@ const Main = () => {
           onClick={() => navigate("/")}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         >
-          <NavTitleLogo className="material-symbols-outlined">
-            payments
+          <NavTitleLogo>
+            <img src={logo} alt="asdasd" style={{width: "100px"}} />
           </NavTitleLogo>
+{/* 
           <NavTitle>
-            Financial
-            <br />
-            Partners
-          </NavTitle>
+            MOAYO
+          </NavTitle> */}
         </div>
         <div>
           <LoginBtn onClick={() => navigate("/auth/login")}>로그인</LoginBtn>
