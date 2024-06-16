@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 
 // Define the expected data type
 interface Transaction {
@@ -104,13 +104,13 @@ const Detail = () => {
   const [data, setData] = useState<Transaction[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<Transaction | null>(null);
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://43.201.7.157:8080/history/${flId}`, {
+        .get(`http://43.201.7.157:8080/history/${flId.id}`, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,

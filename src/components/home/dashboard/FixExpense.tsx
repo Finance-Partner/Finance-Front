@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 import { formatNumberWithCommas } from "../../utils";
 
 // Define the expected data type
@@ -110,7 +110,7 @@ const FixExpense = () => {
   const [newContent, setNewContent] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDate, setNewDate] = useState("");
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const fetchFixedExpense = async () => {
@@ -118,7 +118,7 @@ const FixExpense = () => {
 
       try {
         const response = await axios.get(
-          `http://43.201.7.157:8080/fl/info?flId=${flId}`,
+          `http://43.201.7.157:8080/fl/info?flId=${flId.id}`,
           {
             headers: {
               Accept: "application/json",
@@ -156,7 +156,7 @@ const FixExpense = () => {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            flId: flId,
+            flId: flId.id,
             content: newContent,
             amount: newAmount,
             date: newDate,

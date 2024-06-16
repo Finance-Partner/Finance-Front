@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { formatNumberWithCommas } from "../../utils";
-import { householderIdState, selectedLedgerIdState } from "../../../atom";
+import { householderIdState, selectedLedgerState } from "../../../atom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Income = styled.h1`
 
 const FixIncome = () => {
   const [fixedIncome, setFixedIncome] = useState(0);
-  const flId = useRecoilValue(selectedLedgerIdState);
+  const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
     const fetchFixedIncome = async () => {
@@ -36,7 +36,7 @@ const FixIncome = () => {
 
       try {
         const response = await axios.get(
-          `http://43.201.7.157:8080/fl/info?flId=${flId}`,
+          `http://43.201.7.157:8080/fl/info?flId=${flId.id}`,
           {
             headers: {
               Accept: "application/json",

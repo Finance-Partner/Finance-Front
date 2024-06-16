@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import logo from "../img/moayoLogo2.png"
 
 const BigContainer = styled.div`
   display: flex;
@@ -206,15 +207,9 @@ const Register = () => {
               alignItems: "center",
             }}
           >
-            <p
-              style={{ fontSize: "80px", marginRight: "20px" }}
-              className="material-symbols-outlined"
-            >
-              payments
-            </p>
+            <img src={logo} alt="" style={{marginRight:"10px", width:"100px"}}/>
             <p style={{ fontSize: "50px" }}>
-              Financial <br />
-              Partners
+              MOAYO
             </p>
           </h1>
         </Container>
