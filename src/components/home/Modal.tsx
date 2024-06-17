@@ -26,6 +26,7 @@ const ModalContent = styled.div`
   width: 400px;
   max-height: 80%;
   overflow-y: auto;
+  z-index: 10;
 `;
 
 const ModalTitle = styled.h2`
