@@ -5,8 +5,9 @@ import ReactCalendar from "./ReactCalendar";
 import SubmitForm from "./SubmitForm";
 import { formatNumberWithCommas } from "../../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerState } from "../../../atom";
+import { selectedLedgerState } from "../../../atom";
 import {Transaction, Transactions} from "./types";
+import FixedDetails from "./FixedDetail";
 
 
 
@@ -85,6 +86,8 @@ const Overview = () => {
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showFixedDetails, setShowFixedDetails] = useState(true);
   const flId = useRecoilValue(selectedLedgerState);
 
   useEffect(() => {
@@ -121,6 +124,20 @@ const Overview = () => {
       });
   }, [flId, transactions]);
 
+  const handleDateClick = (date: Date) => {
+    if (selectedDate?.toDateString() === date.toDateString()) {
+      setShowFixedDetails(true);
+    } else {
+      setSelectedDate(date);
+      setShowFixedDetails(false);
+    }
+  };
+
+  const handleFormSubmit = () => {
+    setShowFixedDetails(true);
+    setSelectedDate(null);
+  };
+
   const currentMonthBalance = currentMonthIncome - currentMonthSpending;
   const processedTransactions = processTransactions(transactions);
 
@@ -156,10 +173,10 @@ const Overview = () => {
           </div>
         </Item3>
         <Item4>
-          <ReactCalendar transactions={processedTransactions} />
+          <ReactCalendar transactions={processedTransactions} onDateClick={handleDateClick} />
         </Item4>
         <Item5>
-          <SubmitForm />
+          {showFixedDetails ? <FixedDetails /> : <SubmitForm date={selectedDate!} onFormSubmit={handleFormSubmit} />}
         </Item5>
       </Wrapper>
     </>

@@ -197,7 +197,7 @@ const FixExpense = () => {
           {formatNumberWithCommas(fixedExpense)}
           <span>KR</span>
         </Income>
-        <EditButton onClick={() => setShowModal(true)}>수정</EditButton>
+        {/* <EditButton onClick={() => setShowModal(true)}>수정</EditButton> */}
       </div>
       <ModalOverlay show={showModal}>
         <ModalContent>

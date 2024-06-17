@@ -1,8 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { householderIdState, selectedLedgerState } from "../../../atom";
+import { formatDate } from "react-calendar/dist/cjs/shared/dateFormatter";
 
 // 타입 정의
 interface RadioLabelProps {
@@ -82,7 +83,12 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const SubmitForm: React.FC = () => {
+interface SubmitFormProps {
+  date: Date;
+  onFormSubmit: () => void;
+}
+
+const SubmitForm: React.FC<SubmitFormProps> = ({date, onFormSubmit}) => {
   // 현재 날짜를 ISO 형식의 문자열로 변환
   const flId = useRecoilValue(selectedLedgerState);
   const getCurrentDate = () => {
@@ -92,15 +98,28 @@ const SubmitForm: React.FC = () => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   // 상태 관리
   const [form, setForm] = useState({
-    date: getCurrentDate(), // 기본 날짜를 현재 날짜로 설정
+    date: formatDate(date), // 기본 날짜를 현재 날짜로 설정
     amount: "",
     type: "지출",
     category: "",
     memo: "",
   });
+
+  useEffect(() => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      date: formatDate(date),
+    }));
+  }, [date]);
 
   // 라디오 버튼 클릭 시 상태 업데이트
   const handleTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -157,14 +176,7 @@ const SubmitForm: React.FC = () => {
       .then((response) => {
         alert("추가 완료!");
         console.log("Data saved successfully:", response.data);
-        // 폼 상태를 초기화
-        setForm({
-          date: getCurrentDate(), // 기본 날짜를 현재 날짜로 재설정
-          amount: "",
-          type: "지출",
-          category: "",
-          memo: "",
-        });
+        onFormSubmit();
       })
       .catch((error) => {
         console.error("Error saving data:", error);

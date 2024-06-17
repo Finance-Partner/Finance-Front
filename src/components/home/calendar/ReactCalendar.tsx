@@ -11,6 +11,7 @@ type Value = Date | Date[];
 
 interface ReactCalendarProps {
   transactions: Transactions;
+  onDateClick: (date: Date) => void;
 }
 
 const StyledCalendarWrapper = styled.div`
@@ -43,7 +44,7 @@ const Expense = styled.div`
 `;
 
 
-const ReactCalendar: React.FC<ReactCalendarProps> = ({transactions}) => {
+const ReactCalendar: React.FC<ReactCalendarProps> = ({transactions, onDateClick}) => {
   const getTitleContent = ({date}: {date: Date}) => {
       const dateString = moment(date).format('YYYY-MM-DD');
       const transaction = transactions[dateString];
@@ -73,6 +74,7 @@ const ReactCalendar: React.FC<ReactCalendarProps> = ({transactions}) => {
         next2Label={null}
         prev2Label={null}
         tileContent={getTitleContent}
+        onClickDay={onDateClick}
       />
     </StyledCalendarWrapper>
   );
