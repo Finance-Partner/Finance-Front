@@ -2,10 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import Calendar from "react-calendar";
-import moment from 'moment';
+import moment from "moment";
 import { Transaction, Transactions } from "./types";
 import "react-calendar/dist/Calendar.css";
-
 
 type Value = Date | Date[];
 
@@ -16,9 +15,9 @@ interface ReactCalendarProps {
 
 const StyledCalendarWrapper = styled.div`
   width: 100%;
-  height:100%;
+  height: 100%;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   position: relative;
   .react-calendar {
     width: 100%;
@@ -43,32 +42,34 @@ const Expense = styled.div`
   color: purple;
 `;
 
+const ReactCalendar: React.FC<ReactCalendarProps> = ({
+  transactions,
+  onDateClick,
+}) => {
+  const getTitleContent = ({ date }: { date: Date }) => {
+    const dateString = moment(date).format("YYYY-MM-DD");
+    const transaction = transactions[dateString];
 
-const ReactCalendar: React.FC<ReactCalendarProps> = ({transactions, onDateClick}) => {
-  const getTitleContent = ({date}: {date: Date}) => {
-      const dateString = moment(date).format('YYYY-MM-DD');
-      const transaction = transactions[dateString];
+    if (transaction) {
+      return (
+        <TransactionInfo>
+          {transaction.income > 0 && (
+            <Income>+{transaction.income.toLocaleString()}원</Income>
+          )}
+          {transaction.expense > 0 && (
+            <Expense>-{transaction.expense.toLocaleString()}원</Expense>
+          )}
+        </TransactionInfo>
+      );
+    }
 
-      if (transaction) {
-        return (
-          <TransactionInfo>
-            {transaction.income > 0 && (
-              <Income>+{transaction.income.toLocaleString()}원</Income>
-            )}
-            {transaction.expense > 0 && (
-              <Expense>-{transaction.expense.toLocaleString()}원</Expense>
-            )}
-          </TransactionInfo>
-        )
-      }
-
-    return null
+    return null;
   };
 
   return (
     <StyledCalendarWrapper>
       <Calendar
-        formatDay={(locale, date) => moment(date).format('D')}
+        formatDay={(locale, date) => moment(date).format("D")}
         formatYear={(locale, date) => moment(date).format("YYYY")}
         showNeighboringMonth={true}
         next2Label={null}

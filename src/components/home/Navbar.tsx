@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { myFlListsState, selectedLedgerState, userInfoType } from "../../atom";
 import { useMatch } from "react-router-dom";
 import Notification from "./Notification";
-import profileImg from "../../img/basicUserImg.png"
+import profileImg from "../../img/basicUserImg.png";
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -126,7 +126,7 @@ interface NavBarProps {
   setStartIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const NavBar:React.FC<NavBarProps> = ({
+const NavBar: React.FC<NavBarProps> = ({
   logo,
   navigate,
   setShowModal,
@@ -141,7 +141,8 @@ const NavBar:React.FC<NavBarProps> = ({
   const budgetMatch = useMatch("/home/budget");
   const anaylsisMatch = useMatch("/home/analysis");
   const [myFlLists, setMyFlLists] = useRecoilState(myFlListsState);
-  const [selectedLedger, setSelectedLedger] = useRecoilState(selectedLedgerState);
+  const [selectedLedger, setSelectedLedger] =
+    useRecoilState(selectedLedgerState);
 
   const handlePrev = () => {
     if (myFlLists.length === 0) return;
@@ -179,18 +180,29 @@ const NavBar:React.FC<NavBarProps> = ({
 
   return (
     <NavBarContainer>
-      <img
-        src={logo}
+      <div
         style={{
-          width: "3em",
-          fontSize: "35px",
-          textAlign: "center",
+          width: "100%",
+          display: "flex",
           justifyContent: "center",
-          marginTop: "20px",
-          marginBottom: "15px",
-          color: "#7763f4",
+          marginTop: "2vw",
         }}
-      ></img>
+      >
+        <img
+          src={logo}
+          style={{
+            width: "35%",
+            fontSize: "35px",
+            alignContent: "center",
+            textAlign: "center",
+            justifyContent: "center",
+            marginTop: "20px",
+            marginBottom: "15px",
+            color: "#7763f4",
+          }}
+        />
+      </div>
+
       <DoubleIconContainer>
         <IconContaienr
           onClick={() => navigate("/home/dashboard")}
@@ -252,7 +264,10 @@ const NavBar:React.FC<NavBarProps> = ({
         </IconContaienr>
       </DoubleIconContainer>
       <UserContainer>
-        <UserImg src={userInfo?.photo != null ? userInfo.photo : profileImg} alt="프로필 이미지" />
+        <UserImg
+          src={userInfo?.photo != null ? userInfo.photo : profileImg}
+          alt="프로필 이미지"
+        />
       </UserContainer>
       <p
         style={{
@@ -292,7 +307,7 @@ const NavBar:React.FC<NavBarProps> = ({
               </p>
               <p style={{ fontSize: "10px", textAlign: "center" }}>알림</p>
             </div> */}
-            <Notification getUserInfo={getUserInfo}/>
+            <Notification getUserInfo={getUserInfo} />
             <div
               style={{ cursor: "pointer" }}
               onClick={() => {
@@ -315,7 +330,10 @@ const NavBar:React.FC<NavBarProps> = ({
             </div>
 
             <div
-              onClick={() => {setShowModal(true); setModalType("logout")}}
+              onClick={() => {
+                setShowModal(true);
+                setModalType("logout");
+              }}
               style={{ marginLeft: "15px", cursor: "pointer" }}
             >
               <p

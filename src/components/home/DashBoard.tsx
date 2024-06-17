@@ -9,6 +9,8 @@ import Teammate from "./dashboard/Teammate";
 import DashHistory from "./dashboard/DashHistory";
 import ReactCalendar from "./calendar/ReactCalendar";
 import Calendar from "react-calendar";
+import { useState } from "react";
+import { Transaction } from "./calendar/types";
 
 const Wrapper = styled.div`
   display: grid;
