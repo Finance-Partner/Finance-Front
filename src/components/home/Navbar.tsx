@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { myFlListsState, selectedLedgerState, userInfoType } from "../../atom";
 import { useMatch } from "react-router-dom";
 import Notification from "./Notification";
+import profileImg from "../../img/basicUserImg.png"
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -62,7 +63,6 @@ const UserImg = styled.img`
   width: 7vw;
   height: 7vw;
   border-radius: 50%;
-  background-color: black;
 `;
 
 const CircleBtnContainer = styled.div<{ isSelected: boolean }>`
@@ -252,7 +252,7 @@ const NavBar:React.FC<NavBarProps> = ({
         </IconContaienr>
       </DoubleIconContainer>
       <UserContainer>
-        <UserImg src={userInfo?.photo != null ? userInfo.photo : ""} alt="프로필 이미지" />
+        <UserImg src={userInfo?.photo != null ? userInfo.photo : profileImg} alt="프로필 이미지" />
       </UserContainer>
       <p
         style={{
