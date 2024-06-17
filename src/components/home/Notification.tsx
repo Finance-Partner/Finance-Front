@@ -1,5 +1,5 @@
 // Notification.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { invitedListsState, selectedLedgerState } from "../../atom";
@@ -106,7 +106,7 @@ interface NotificationProps {
   getUserInfo: () => void;
 }
 
-const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
+const Notification: React.FC<NotificationProps> = ({ getUserInfo }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [invitedLists, setInvitedLists] = useRecoilState(invitedListsState);
@@ -130,7 +130,7 @@ const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
         {},
         {
           headers: {
-            accept: 'application/json',
+            accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -141,12 +141,12 @@ const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
       );
       setShowModal(false);
     } catch (error) {
-      console.error('Error accepting invite:', error);
+      console.error("Error accepting invite:", error);
     }
     getUserInfo();
     setShowNotifications(false);
     setShowModal(false);
-  }
+  };
 
   const handleReject = async () => {
     if (!selectedNotification) return;
@@ -156,7 +156,7 @@ const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
         {},
         {
           headers: {
-            accept: 'application/json',
+            accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -167,12 +167,11 @@ const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
       );
       setShowModal(false);
     } catch (error) {
-      console.error('Error rejecting invite:', error);
+      console.error("Error rejecting invite:", error);
     }
     getUserInfo();
     setShowNotifications(false);
     setShowModal(false);
-    
   };
 
   return (
@@ -192,24 +191,34 @@ const Notification: React.FC<NotificationProps> = ({getUserInfo}) => {
           </p>
           <p style={{ fontSize: "10px", textAlign: "center" }}>알림</p>
         </NotificationIcon>
-        <NotificationList show={showNotifications}>
-          {invitedLists.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              onClick={() => handleItemClick(notification)}
-            >
-              <NotificationIconItem>🔔</NotificationIconItem>
-              <NotificationContent>
-                <NotificationHeader>{notification.name}</NotificationHeader>
-                <div>가계부에 초대되셨어요</div>
+        <NotificationList className="notification-list" show={showNotifications}>
+          {invitedLists.length <= 0 ? (
+            <NotificationBottom>
+              <NotificationContent style={{ textAlign: "center" }}>
+                알림이 없습니다
               </NotificationContent>
-            </NotificationItem>
-          ))}
-          <NotificationBottom>
-            <NotificationContent style={{ textAlign: "center" }}>
-              All Notifications
-            </NotificationContent>
-          </NotificationBottom>
+            </NotificationBottom>
+          ) : (
+            <>
+              {invitedLists.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  onClick={() => handleItemClick(notification)}
+                >
+                  <NotificationIconItem>🔔</NotificationIconItem>
+                  <NotificationContent>
+                    <NotificationHeader>{notification.name}</NotificationHeader>
+                    <div>가계부에 초대되셨어요</div>
+                  </NotificationContent>
+                </NotificationItem>
+              ))}
+              <NotificationBottom>
+                <NotificationContent style={{ textAlign: "center" }}>
+                  All Notifications
+                </NotificationContent>
+              </NotificationBottom>
+            </>
+          )}
         </NotificationList>
       </NotificationContainer>
       <ModalOverlay show={showModal}>
