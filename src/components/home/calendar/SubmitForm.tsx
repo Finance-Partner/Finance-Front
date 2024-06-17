@@ -225,15 +225,15 @@ const SubmitForm: React.FC = () => {
         <FormGroup>
           <Label>카테고리</Label>
           <Select name="category" value={form.category} onChange={handleChange}>
-            <option value="">선택하세요</option>
-            <option value="SALARY">월급</option>
-            <option value="INTEREST">이자</option>
-            <option value="MEAL">식사</option>
-            <option value="SHOPPING">쇼핑</option>
-            <option value="CAFE_SNACK">카페 · 간식</option>
-            <option value="TRANSPORT">교통</option>
-            <option value="CONVSTORE_MART">편의점 · 마트</option>
-            <option value="ETC">기타</option>
+            <option value="">⭐선택하세요⭐</option>
+            <option value="SALARY">💸월급</option>
+            <option value="INTEREST">💰이자</option>
+            <option value="MEAL">🍽️식사</option>
+            <option value="SHOPPING">🛒쇼핑</option>
+            <option value="CAFE_SNACK">☕카페 · 간식</option>
+            <option value="TRANSPORT">🚌교통</option>
+            <option value="CONVSTORE_MART">🏪편의점 · 마트</option>
+            <option value="ETC">🎸기타</option>
           </Select>
         </FormGroup>
         <FormGroup>

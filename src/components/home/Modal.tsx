@@ -5,6 +5,7 @@ import CreateLedgerForm from "./CreateLedgerForm";
 import { Ledger } from "../../atom";
 import EditLedgerForm from "./EditLedgerForm";
 import InviteUserForm from "./InviteUserForm";
+import logo from "../../img/moayoLogo2.png";
 
 const ModalOverlay = styled.div<{ show: boolean }>`
   display: ${({ show }) => (show ? "flex" : "none")};
@@ -46,6 +47,28 @@ const TabButton = styled.button<{ isActive: boolean }>`
   cursor: pointer;
 `;
 
+const AddButton = styled.button`
+  padding: 10px;
+  font-size: 14px;
+  background-color: #7763f4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const EditButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+`;
+
+const LogoutContainer = styled.div`
+  padding: 20px;
+  text-align: center;
+`
+
 interface ModalProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,6 +84,7 @@ interface ModalProps {
   file: File | null;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   getUserInfo: () => void;
+  navigate: (path: string) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -78,6 +102,7 @@ const Modal: React.FC<ModalProps> = ({
   file,
   handleFileChange,
   getUserInfo,
+  navigate,
 }) => {
   return (
     <ModalOverlay show={showModal}>
@@ -127,6 +152,29 @@ const Modal: React.FC<ModalProps> = ({
               />
             )}
           </>
+        )}
+        {modalType === "logout" && (
+          <LogoutContainer>
+            <img src={logo} width="100"></img>
+            <ModalTitle>로그아웃하시겠습니까?</ModalTitle>
+            <div style={{display: "flex"}}>
+            <EditButton
+              onClick={() => {setShowModal(false)}}
+              >
+                닫기
+              </EditButton>
+            <AddButton
+              onClick={() => {
+                navigate("/");
+                localStorage.removeItem("token");
+                setShowModal(false);
+              }}
+            >
+              로그아웃
+            </AddButton>
+            </div>
+
+          </LogoutContainer>
         )}
       </ModalContent>
     </ModalOverlay>
