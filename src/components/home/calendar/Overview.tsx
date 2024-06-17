@@ -7,6 +7,7 @@ import { formatNumberWithCommas } from "../../utils";
 import { useRecoilValue } from "recoil";
 import { householderIdState, selectedLedgerState } from "../../../atom";
 import {Transaction, Transactions} from "./types";
+import FixedDetails from "./FixedDetail";
 
 
 
@@ -159,7 +160,8 @@ const Overview = () => {
           <ReactCalendar transactions={processedTransactions} />
         </Item4>
         <Item5>
-          <SubmitForm />
+          <FixedDetails/>
+          {/* <SubmitForm /> */}
         </Item5>
       </Wrapper>
     </>

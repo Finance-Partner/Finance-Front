@@ -7,6 +7,8 @@ import FixIncome from "./dashboard/FixIncome";
 import FixExpense from "./dashboard/FixExpense";
 import Teammate from "./dashboard/Teammate";
 import DashHistory from "./dashboard/DashHistory";
+import ReactCalendar from "./calendar/ReactCalendar";
+import Calendar from "react-calendar";
 
 const Wrapper = styled.div`
   display: grid;
@@ -15,6 +17,22 @@ const Wrapper = styled.div`
   gap: 10px;
   width: 100%;
   height: 100%;
+`;
+
+const StyledCalendarWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .react-calendar {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: white;
+  }
 `;
 
 const GridItem = styled.div`
@@ -112,7 +130,8 @@ const DashBoard = () => {
       <Item3>
         <MonthExpense />
       </Item3>
-      <Item4></Item4>
+      <Item4>
+      </Item4>
       <Item5>
         <CategoryChart />
       </Item5>
