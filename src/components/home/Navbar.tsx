@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { myFlListsState, selectedLedgerState, userInfoType } from "../../atom";
 import { useMatch } from "react-router-dom";
+import Notification from "./Notification";
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -120,6 +121,7 @@ interface NavBarProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setModalType: React.Dispatch<React.SetStateAction<string>>;
   userInfo: userInfoType | null;
+  getUserInfo: () => void;
   startIndex: number;
   setStartIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -130,6 +132,7 @@ const NavBar:React.FC<NavBarProps> = ({
   setShowModal,
   setModalType,
   userInfo,
+  getUserInfo,
   startIndex,
   setStartIndex,
 }) => {
@@ -273,12 +276,8 @@ const NavBar:React.FC<NavBarProps> = ({
           }}
         >
           <div style={{ display: "flex" }}>
-            <div
+            {/* <div
               style={{ marginRight: "15px", cursor: "pointer" }}
-              onClick={() => {
-                setShowModal(true);
-                setModalType("createFl");
-              }}
             >
               <p
                 style={{
@@ -292,7 +291,8 @@ const NavBar:React.FC<NavBarProps> = ({
                 notifications
               </p>
               <p style={{ fontSize: "10px", textAlign: "center" }}>알림</p>
-            </div>
+            </div> */}
+            <Notification getUserInfo={getUserInfo}/>
             <div
               style={{ cursor: "pointer" }}
               onClick={() => {
@@ -315,10 +315,7 @@ const NavBar:React.FC<NavBarProps> = ({
             </div>
 
             <div
-              onClick={() => {
-                navigate("/");
-                localStorage.removeItem("token");
-              }}
+              onClick={() => {setShowModal(true); setModalType("logout")}}
               style={{ marginLeft: "15px", cursor: "pointer" }}
             >
               <p

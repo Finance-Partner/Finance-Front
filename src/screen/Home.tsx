@@ -87,6 +87,7 @@ const Home = () => {
   const [myFlLists, setMyFlLists] = useRecoilState(myFlListsState);
   const [selectedLedger, setSelectedLedger] = useRecoilState(selectedLedgerState);
   const [myManageFlLists, setMyManageFlLists] = useRecoilState(myManageFlListsState);
+  const [invitedLists, setInvitedLists] = useRecoilState(invitedListsState);
   const [startIndex, setStartIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -109,6 +110,7 @@ const Home = () => {
           const data = response.data;
           setMyFlLists(data.myFlLists);
           setMyManageFlLists(data.myManageFlLists);
+          setInvitedLists(data.invitedLists);
           if (myFlLists.length > 0) {
             setSelectedLedger(data.myFlLists[0]);
           }
@@ -154,6 +156,7 @@ const Home = () => {
             setShowModal={setShowModal} 
             setModalType={setModalType} 
             userInfo={userInfo}
+            getUserInfo={getUserInfo}
             startIndex={startIndex} 
             setStartIndex={setStartIndex}
           />
@@ -175,6 +178,7 @@ const Home = () => {
             file={file} 
             handleFileChange={handleFileChange}
             getUserInfo={getUserInfo}
+            navigate={navigate} 
           />
         </Container>
       </Wrapper>

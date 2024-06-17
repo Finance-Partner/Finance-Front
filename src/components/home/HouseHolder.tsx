@@ -165,7 +165,7 @@ const HouseHolder = () => {
                       }}
                       className="material-symbols-outlined"
                     >
-                      notifications
+                      logout
                     </p>
                   </div>
                   <div
