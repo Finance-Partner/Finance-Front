@@ -22,10 +22,10 @@ const Container = styled.div`
   padding-top: 10px;
   padding-left: 15px;
 `;
-const CategoryImg = styled.img`
+const CategoryImg = styled.div`
+  font-size: 35px;
   width: 40px;
   height: 40px;
-  background-color: black;
   border-radius: 50%;
   margin-top: 5px;
 `;
@@ -56,6 +56,29 @@ interface Transaction {
   category: string;
   isIncome: string;
 }
+
+const getCategoryIcon = (category: string) => {
+  switch (category) {
+    case "MEAL":
+      return "🍽️";
+    case "SHOPPING":
+      return "🛒";
+    case "CAFE_SNACK":
+      return "☕";
+    case "TRANSPORT":
+      return "🚌";
+    case "SALARY":
+      return "💸";
+    case "INTEREST":
+      return "💰";
+    case "CONVSTORE_MART":
+      return "🏪";
+    case "ETC":
+      return "🎸";
+    default:
+      return "💰";
+  }
+};
 
 const DashHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -101,7 +124,7 @@ const DashHistory = () => {
                 marginTop: "5px",
               }}
             >
-              <CategoryImg />
+              <CategoryImg>{getCategoryIcon(transaction.category)}</CategoryImg>
               <div style={{ marginLeft: "10px" }}>
                 <Price isIncome={transaction.isIncome === "INCOME"}>
                   {transaction.isIncome === "INCOME" ? "+" : "-"}

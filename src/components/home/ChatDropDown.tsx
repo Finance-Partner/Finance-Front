@@ -47,6 +47,15 @@ const ChatTitle = styled.div`
 const MessageList = styled.div`
   flex-grow: 1;
   overflow-y: auto;
+  
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 `;
 
 const MessageContainer = styled.div<{ isMine: boolean }>`
@@ -139,6 +148,12 @@ const ChatDropdown: React.FC<ChatDropdownProps> = ({ fl }) => {
       clearInterval(interval);
     };
   }, [selectedLedger, showDropdown]);
+
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, []);
 
 
   const fetchMessages = async () => {

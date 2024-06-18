@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useState } from "react";
 import Calendar from "react-calendar";
 import moment from "moment";
-import { Transaction, Transactions } from "./types";
+import { Transactions } from "./types";
 import "react-calendar/dist/Calendar.css";
 
 type Value = Date | Date[];
@@ -26,6 +25,7 @@ const StyledCalendarWrapper = styled.div`
     padding: 8% 5%;
     background-color: white;
   }
+
 `;
 
 const TransactionInfo = styled.div`
@@ -46,11 +46,11 @@ const ReactCalendar: React.FC<ReactCalendarProps> = ({
   transactions,
   onDateClick,
 }) => {
-  const getTitleContent = ({ date }: { date: Date }) => {
+  const getTitleContent = ({ date, view }: { date: Date; view: string }) => {
     const dateString = moment(date).format("YYYY-MM-DD");
     const transaction = transactions[dateString];
 
-    if (transaction) {
+    if (transaction && view === "month") {
       return (
         <TransactionInfo>
           {transaction.income > 0 && (
@@ -74,7 +74,7 @@ const ReactCalendar: React.FC<ReactCalendarProps> = ({
         showNeighboringMonth={true}
         next2Label={null}
         prev2Label={null}
-        tileContent={getTitleContent}
+        tileContent={({ date, view }) => getTitleContent({ date, view })}
         onClickDay={onDateClick}
       />
     </StyledCalendarWrapper>

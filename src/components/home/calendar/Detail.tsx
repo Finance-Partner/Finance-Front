@@ -49,6 +49,27 @@ const Th = styled.th`
   background-color: white;
   font-weight: bold;
   padding-bottom: 15px;
+  &:nth-child(1) {
+    width: 10%;
+  }
+  &:nth-child(2) {
+    width: 20%;
+  }
+  &:nth-child(3) {
+    width: 20%;
+  }
+  &:nth-child(4) {
+    width: 10%;
+  }
+  &:nth-child(5) {
+    width: 20%;
+  }
+  &:nth-child(6) {
+    width: 10%;
+  }
+  &:nth-child(7) {
+    width: 10%;
+  }
 `;
 
 const Td = styled.td`
