@@ -1,10 +1,2 @@
-### To Do List
-
-- register css변경
-- 가계부 페이지 달력 연동
-- 팀원 이미지 받기
-- 카테고리별로 이미지 추가해서 내역에 표시
-- 가계부 선택하는 css작성
-- 분석 탭 완성
-- 설정 페이지 작성
-- 반응형으로 수정
+### 유의사항!
+- npm install시 npm install --legacy-peer-deps를 사용해주세요!
