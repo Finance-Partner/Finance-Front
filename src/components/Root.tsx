@@ -23,38 +23,8 @@ const Icon = styled.span`
   cursor: pointer;
 `;
 const Root = () => {
-  const navigate = useNavigate();
   return (
     <>
-      {/* <NavBar>
-        <div
-          onClick={() => navigate("/")}
-          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-        >
-          <TitleLogo className="material-symbols-outlined">payments</TitleLogo>
-          <Title>Financial Partners</Title>
-        </div>
-        <div>
-          <Icon
-            onClick={() => navigate("/calendar")}
-            className="material-symbols-outlined"
-          >
-            calendar_month
-          </Icon>
-          <Icon
-            onClick={() => navigate("/chart")}
-            className="material-symbols-outlined"
-          >
-            query_stats
-          </Icon>
-          <Icon
-            onClick={() => navigate("/auth/login")}
-            className="material-symbols-outlined"
-          >
-            person
-          </Icon>
-        </div>
-      </NavBar> */}
       <Outlet />
     </>
   );

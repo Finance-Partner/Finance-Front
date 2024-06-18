@@ -8,6 +8,7 @@ import AnalysisCategoryChart from "./analysis/AnalysisCategoryChart";
 import { useRecoilState } from "recoil";
 import { householderIdState, selectedLedgerState } from "../../atom";
 import Ranking from "./analysis/Ranking";
+import WordCloudComponent from "./analysis/WordCloud";
 
 const BigWrapper = styled.div`
   width: 100%;
@@ -258,15 +259,25 @@ const Analysis: React.FC = () => {
         </Wrapper>
       </div>
 
-      <div style={{ width: "100%", height: "37%", display: "flex" }}>
-        <div style={{ width: "40%", height: "100%" }}>
+      <div style={{ width: "100%", height: "35%", display: "flex" }}>
+        <div style={{ width: "50%", height: "100%" }}>
           <AnalysisCategoryChart />
         </div>
-        <div style={{ width: "60%", height: "100%", backgroundColor: "white" }}>
+        <div
+          style={{
+            width: "50%",
+            height: "100%",
+            backgroundColor: "white",
+            borderRadius: "20px",
+            marginLeft: "20px",
+          }}
+        >
           <Ranking />
         </div>
       </div>
-      <div style={{ height: "33%", width: "100%" }}></div>
+      <div style={{ height: "35%", width: "100", paddingTop: "2%" }}>
+        <WordCloudComponent />
+      </div>
     </BigWrapper>
   );
 };
