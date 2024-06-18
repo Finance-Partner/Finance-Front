@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import image from "../img/mainimage.png";
 import logo from "../img/moayoLogo2.png";
-
+import img1 from "../img/pre1.png";
+import img2 from "../img/pre2.png";
+import img3 from "../img/pre3.png";
 const NavBar = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -94,13 +96,10 @@ const Main = () => {
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         >
           <NavTitleLogo>
-            <img src={logo} alt="asdasd" style={{width: "100px"}} />
+            <img src={logo} alt="asdasd" style={{ width: "100px" }} />
           </NavTitleLogo>
 
-
-          <NavTitle>
-            MOAYO
-          </NavTitle>
+          <NavTitle>MOAYO</NavTitle>
         </div>
         <div>
           <LoginBtn onClick={() => navigate("/auth/login")}>로그인</LoginBtn>
@@ -168,7 +167,12 @@ const Main = () => {
                 borderRadius: "20px",
                 backgroundColor: "violet",
               }}
-            ></div>
+            >
+              <img
+                src={img3}
+                style={{ width: "100%", height: "100%", borderRadius: "20px" }}
+              />
+            </div>
             <div
               style={{
                 width: "57vw",
@@ -176,7 +180,12 @@ const Main = () => {
                 borderRadius: "20px",
                 backgroundColor: "lightblue",
               }}
-            ></div>
+            >
+              <img
+                src={img1}
+                style={{ width: "100%", height: "100%", borderRadius: "20px" }}
+              />
+            </div>
           </div>
           <div
             style={{
@@ -187,7 +196,12 @@ const Main = () => {
               borderRadius: "20px",
               backgroundColor: "darkviolet",
             }}
-          ></div>
+          >
+            <img
+              src={img2}
+              style={{ width: "100%", height: "100%", borderRadius: "20px" }}
+            />
+          </div>
         </div>
       </SContainer>
     </>
