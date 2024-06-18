@@ -59,13 +59,13 @@ const Th = styled.th`
     width: 20%;
   }
   &:nth-child(4) {
-    width: 10%;
+    width: 13%;
   }
   &:nth-child(5) {
     width: 20%;
   }
   &:nth-child(6) {
-    width: 10%;
+    width: 7%;
   }
   &:nth-child(7) {
     width: 10%;

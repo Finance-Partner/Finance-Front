@@ -22,7 +22,7 @@ const StyledCalendarWrapper = styled.div`
     width: 100%;
     border: none;
     border-radius: 20px;
-    padding: 8% 5%;
+    padding: 2% 3%;
     background-color: white;
   }
 
