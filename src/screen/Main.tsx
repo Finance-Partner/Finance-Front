@@ -41,11 +41,18 @@ const LoginBtn = styled.button`
 `;
 const FContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 690px;
+  height: auto;
   background-image: linear-gradient(to right, #5144a6, #917fff);
+  padding: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    height: 690px;
+  }
 `;
 const SContainer = styled.div`
   padding-bottom: 50px;
@@ -59,11 +66,31 @@ const Title = styled.h1`
   font-size: 50px;
   font-weight: bold;
   margin-bottom: 70px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 968px) {
+    font-size: 33px;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
 `;
 const SubTitle = styled.h2`
   color: white;
   font-size: 30px;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    text-align: center;
+  }
+  @media (max-width: 968px) {
+    font-size: 24px;
+  }
 `;
 const MoveToTopBtn = styled.button`
   position: fixed;
@@ -74,6 +101,107 @@ const MoveToTopBtn = styled.button`
   right: 10px;
   border: 2px solid #917fff;
 `;
+
+const Img = styled.img`
+  width: 350px;
+  margin-left: 10vw;
+  position: relative;
+  top: 10px;
+  border-radius: 10px;
+
+  @media (max-width: 768px) {
+    width: 300px;
+    top: 20px;
+    margin-left: 0vw;
+    margin-bottom: 5vw;
+  }
+  @media (max-width: 968px) {
+    width: 300px;
+    top: 20px;
+    margin-left: 5vw;
+    margin-bottom: 5vw;
+  }
+`;
+
+const STitle = styled.h2`
+  margin-top: 30px;
+  color: #0047ff;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const SSubTitle = styled.h3`
+  margin-top: 10px;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const SContent = styled.div`
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+`;
+
+const SImgContainer = styled.div`
+  width: 27vw;
+  height: 300px;
+  border-radius: 20px;
+  background-color: violet;
+
+  @media (max-width: 768px) {
+    height: 170px;
+  }
+  @media (max-width: 968px) {
+    height: 240px;
+  }
+`;
+
+const SImgContainerTwo = styled.div`
+  width: 57vw;
+  height: 300px;
+  border-radius: 20px;
+  background-color: lightblue;
+
+  
+  @media (max-width: 768px) {
+    height: 170px;
+  }
+  @media (max-width: 968px) {
+    height: 240px;
+  }
+
+`;
+
+const SImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+`;
+
+const SImgSecondContainer = styled.div`
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 85vw;
+  height: 300px;
+  border-radius: 20px;
+  background-color: darkviolet;
+
+  
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+
+@media (max-width: 968px) {
+    height: 280px;
+  }
+`;
+
 const Main = () => {
   const navigate = useNavigate();
   const handleScrollToTop = () => {
@@ -96,7 +224,7 @@ const Main = () => {
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         >
           <NavTitleLogo>
-            <img src={logo} alt="asdasd" style={{ width: "100px" }} />
+            <img src={logo} alt="logo" style={{ width: "100px" }} />
           </NavTitleLogo>
 
           <NavTitle>MOAYO</NavTitle>
@@ -120,88 +248,27 @@ const Main = () => {
           </SubTitle>
         </div>
         <div>
-          <img
-            style={{ paddingLeft: "10vw", position: "relative", top: "30px" }}
-            src={image}
-          />
+          <Img src={image} />
         </div>
       </FContainer>
       <SContainer>
         <div style={{ width: "100%" }}>
-          <h2
-            style={{
-              marginTop: "50px",
-              color: "#0047FF",
-              fontSize: "20px",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            공유기능
-          </h2>
-          <h3
-            style={{
-              marginTop: "10px",
-              color: "black",
-              fontSize: "20px",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
+          <STitle>공유 가계부</STitle>
+          <SSubTitle>
             모아요에서
             <br /> 다양한 사람들과 가계부를 작성해보세요.
-          </h3>
-          <div
-            style={{
-              marginTop: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "20px",
-            }}
-          >
-            <div
-              style={{
-                width: "27vw",
-                height: "300px",
-                borderRadius: "20px",
-                backgroundColor: "violet",
-              }}
-            >
-              <img
-                src={img3}
-                style={{ width: "100%", height: "100%", borderRadius: "20px" }}
-              />
-            </div>
-            <div
-              style={{
-                width: "57vw",
-                height: "300px",
-                borderRadius: "20px",
-                backgroundColor: "lightblue",
-              }}
-            >
-              <img
-                src={img1}
-                style={{ width: "100%", height: "100%", borderRadius: "20px" }}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              margin: "0 auto",
-              marginTop: "20px",
-              width: "85vw",
-              height: "300px",
-              borderRadius: "20px",
-              backgroundColor: "darkviolet",
-            }}
-          >
-            <img
-              src={img2}
-              style={{ width: "100%", height: "100%", borderRadius: "20px" }}
-            />
-          </div>
+          </SSubTitle>
+          <SContent>
+            <SImgContainer>
+              <SImg src={img3} />
+            </SImgContainer>
+            <SImgContainerTwo>
+              <SImg src={img1} />
+            </SImgContainerTwo>
+          </SContent>
+          <SImgSecondContainer>
+            <SImg src={img2} />
+          </SImgSecondContainer>
         </div>
       </SContainer>
     </>
