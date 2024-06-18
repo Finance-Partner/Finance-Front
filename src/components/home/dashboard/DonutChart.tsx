@@ -65,7 +65,7 @@ const DonutChart = () => {
 
   const getLabel = () => {
     const [income, expenses] = data.series;
-    return income > expenses
+    return income >= expenses
       ? `+${formatNumberWithCommas(income - expenses)}원`
       : `-${formatNumberWithCommas(expenses - income)}원`;
   };

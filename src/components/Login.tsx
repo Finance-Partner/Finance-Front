@@ -2,9 +2,31 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import logo from "../img/moayoLogo2.png";
+
+interface Sizes {
+  [key: string]: number;
+}
+
+const sizes: Sizes = {
+  desktop: 1024,
+  tablet: 768,
+  phone: 576,
+};
+
+// Define the media queries helper with proper TypeScript types
+const media = Object.keys(sizes).reduce((acc, key) => {
+  acc[key] = (
+    style: TemplateStringsArray | string,
+    ...interpolations: any[]
+  ) => css`
+    @media (max-width: ${sizes[key as keyof Sizes]}px) {
+      ${css(style as TemplateStringsArray, ...interpolations)}
+    }
+  `;
+  return acc;
+}, {} as Record<string, (style: TemplateStringsArray | string, ...interpolations: any[]) => ReturnType<typeof css>>);
 
 const BigContainer = styled.div`
   display: flex;
@@ -15,17 +37,40 @@ const BigContainer = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   width: 70vw;
   height: 80vh;
+  ${media.tablet`
+    flex-direction: column;
+    width: 90vw;
+    height: auto;
+    padding: 20px;
+  `}
+  ${media.phone`
+    width: 100vw;
+    padding: 10px;
+  `}
 `;
-const Container = styled.div`
+
+const Container = styled.div<{ borderRight?: boolean }>`
   width: 50%;
   height: 100%;
   padding-left: 30px;
+  border-right: ${(props) => props.borderRight ? "1px solid black" : "none"};
   h1 {
     font-size: 35px;
     font-weight: bold;
     margin-bottom: 10px;
   }
+  ${media.tablet`
+    width: 100%;
+    padding: 20px 10px;
+    border-right: none;
+  `}
+  ${media.phone`
+    width: 100%;
+    padding: 20px 10px;
+    border-right: none;
+  `}
 `;
+
 const Form = styled.form`
   width: 85%;
   padding-top: 20px;
@@ -51,49 +96,53 @@ const Form = styled.form`
     color: ${(props) => props.theme.buttonTextColor};
     background-color: ${(props) => props.theme.buttonColor};
   }
+  ${media.tablet`
+    width: 100%;
+  `}
 `;
+
 const ErrorMessage = styled.p`
   color: red;
   font-weight: bold;
   margin-top: 10px;
 `;
+
+interface ILoginForm {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues } = useForm<ILoginForm>();
   const [errorMessage, setErrorMessage] = useState("");
-  console.log(localStorage.getItem("token"));
-  interface ILoginForm {
-    email: string;
-    password: string;
-  }
+
   const onValid = () => {
-    const url = "http://43.201.7.157:8080/login";
     const { email, password } = getValues();
-    axios
-      .post("http://43.201.7.157:8080/login", null, {
-        params: {
-          email: email,
-          password: password,
-        },
-        headers: {
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        navigate("/home/dashboard");
-        console.log("Response:", response.data);
-        localStorage.setItem("token", response.data.token);
-        setErrorMessage(() => ""); // 로그인 성공 시 에러 메시지 초기화
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setErrorMessage(() => "유효하지 않은 로그인입니다"); // 에러 발생 시 에러 메시지 설정
-      });
+    axios.post("http://43.201.7.157:8080/login", null, {
+      params: {
+        email: email,
+        password: password,
+      },
+      headers: {
+        Accept: "application/json",
+      },
+    })
+    .then((response) => {
+      navigate("/home/dashboard");
+      localStorage.setItem("token", response.data.token);
+      setErrorMessage(""); // 로그인 성공 시 에러 메시지 초기화
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      setErrorMessage("유효하지 않은 로그인입니다"); // 에러 발생 시 에러 메시지 설정
+    });
   };
+
   return (
     <>
       <BigContainer>
-        <Container style={{ borderRight: "1px solid black" }}>
+        <Container borderRight={true}>
           <h1
             onClick={() => navigate("/")}
             style={{
@@ -106,27 +155,15 @@ const Login = () => {
               alignItems: "center",
             }}
           >
-            <img src={logo} alt="" style={{marginRight:"10px", width:"100px"}}/>
-            <p style={{ fontSize: "50px" }}>
-              MOAYO
-            </p>
+            <img src={logo} alt="" style={{ marginRight: "10px", width: "100px" }}/>
+            <p style={{ fontSize: "50px" }}>MOAYO</p>
           </h1>
         </Container>
-        <Container
-          style={{
-            paddingTop: "17vh",
-            paddingLeft: "5vw",
-            borderLeft: "1px solid black",
-          }}
-        >
-          <div>
+        <Container>
+          <div style={{marginTop:"18vh"}}>
             <h1>로그인</h1>
             <p>
-              계정이 없으신가요?{" "}
-              <span
-                onClick={() => navigate("/auth/register")}
-                style={{ textDecoration: "underline", cursor: "pointer" }}
-              >
+              계정이 없으신가요? <span onClick={() => navigate("/auth/register")} style={{ textDecoration: "underline", cursor: "pointer" }}>
                 회원가입
               </span>
             </p>
@@ -135,10 +172,7 @@ const Login = () => {
             <p>이메일</p>
             <input {...register("email", { required: true })} />
             <p>비밀번호</p>
-            <input
-              {...register("password", { required: true })}
-              type="password"
-            />
+            <input {...register("password", { required: true })} type="password"/>
             <button>로그인</button>
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </Form>
@@ -147,4 +181,5 @@ const Login = () => {
     </>
   );
 };
+
 export default Login;
