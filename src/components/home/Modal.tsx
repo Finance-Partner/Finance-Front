@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ProfileForm from "./ProfileForm";
 import CreateLedgerForm from "./CreateLedgerForm";
@@ -6,6 +6,7 @@ import { Ledger } from "../../atom";
 import EditLedgerForm from "./EditLedgerForm";
 import InviteUserForm from "./InviteUserForm";
 import logo from "../../img/moayoLogo2.png";
+import { userInfo } from "os";
 
 const ModalOverlay = styled.div<{ show: boolean }>`
   display: ${({ show }) => (show ? "flex" : "none")};
@@ -23,7 +24,7 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 500px;
   max-height: 80%;
   overflow-y: auto;
   z-index: 10;
@@ -31,6 +32,7 @@ const ModalContent = styled.div`
 
 const ModalTitle = styled.h2`
   margin-bottom: 20px;
+  font-weight: bold;
 `;
 
 const TabContainer = styled.div`
@@ -56,6 +58,7 @@ const AddButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
 `;
 
 const EditButton = styled.button`
@@ -105,17 +108,26 @@ const Modal: React.FC<ModalProps> = ({
   getUserInfo,
   navigate,
 }) => {
+  const handleOverlayClick = () => {
+    setShowModal(false);
+
+  };
+
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <ModalOverlay show={showModal}>
-      <ModalContent>
+    <ModalOverlay show={showModal} onClick={handleOverlayClick}>
+      <ModalContent onClick={handleContentClick}>
         {modalType === "createFl" && (
-          <>
+          <LogoutContainer>
             <ModalTitle>가계부 생성</ModalTitle>
             <CreateLedgerForm
               getUserInfo={getUserInfo}
               setShowModal={setShowModal}
             />
-          </>
+          </LogoutContainer>
         )}
         {modalType === "setting" && (
           <>
@@ -157,13 +169,8 @@ const Modal: React.FC<ModalProps> = ({
         {modalType === "logout" && (
           <LogoutContainer>
             <img src={logo} width="100"></img>
-            <ModalTitle>로그아웃하시겠습니까?</ModalTitle>
+            <ModalTitle style={{margin: "20px"}}>로그아웃 하시겠습니까?</ModalTitle>
             <div style={{display: "flex"}}>
-            <EditButton
-              onClick={() => {setShowModal(false)}}
-              >
-                닫기
-              </EditButton>
             <AddButton
               onClick={() => {
                 navigate("/");

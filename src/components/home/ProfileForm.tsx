@@ -1,11 +1,15 @@
 import axios from "axios";
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
+import { userInfoState, userInfoType } from "../../atom";
+import { useRecoilValue } from "recoil";
+import profileImg from "../../img/basicUserImg.png";
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: center; /* 추가: 폼 컨테이너 내의 모든 요소를 가운데 정렬 */
 `;
 
 const Input = styled.input`
@@ -13,6 +17,7 @@ const Input = styled.input`
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 100%; /* 추가: 입력 필드의 너비를 100%로 설정 */
 `;
 
 const AddButton = styled.button`
@@ -23,13 +28,17 @@ const AddButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%; /* 추가: 버튼의 너비를 100%로 설정 */
 `;
 
-const EditButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 14px;
+
+const ImagePreview = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
   cursor: pointer;
+  margin-bottom: 20px; /* 추가: 아래쪽 여백 추가 */
 `;
 
 interface ProfileFormProps {
@@ -57,6 +66,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   setShowModal,
   getUserInfo,
 }) => {
+  const token = localStorage.getItem("token");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newUserName && newPwd && newPwd === chkNewPwd) {
@@ -116,9 +128,25 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     }
   };
 
+  const userInfo = useRecoilValue<userInfoType | null>(userInfoState);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <FormContainer onSubmit={handleProfileSubmit}>
-      <Input type="file" onChange={handleFileChange} />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
+      <ImagePreview
+        src={file ? URL.createObjectURL(file) : userInfo?.photo || profileImg}
+        alt="Profile"
+        onClick={handleImageClick}
+      />
       <Input
         type="text"
         placeholder="이름"
@@ -141,7 +169,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         required
       />
       <AddButton type="submit">수정 완료</AddButton>
-      <EditButton onClick={() => setShowModal(false)}>닫기</EditButton>
     </FormContainer>
   );
 };
