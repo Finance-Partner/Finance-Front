@@ -4,7 +4,7 @@ import axios from "axios";
 import BudgetChart from "./budget/BudgetChart";
 import { formatNumberWithCommas } from "../utils";
 import { useRecoilValue } from "recoil";
-import { householderIdState, selectedLedgerState } from "../../atom";
+import { selectedLedgerState } from "../../atom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -247,8 +247,8 @@ const Budget = () => {
   const handleSaveBudget = () => {
     const token = localStorage.getItem("token");
     axios
-      .patch(
-        `http://43.201.7.157:8080/fl`,
+      .post(
+        `http://43.201.7.157:8080/fl/budget`,
         {},
         {
           headers: {
@@ -258,7 +258,6 @@ const Budget = () => {
           params: {
             flId: flId.id,
             budget: newBudget,
-            title: "string", // 필요시 다른 값으로 변경
           },
         }
       )

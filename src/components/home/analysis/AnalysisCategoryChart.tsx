@@ -117,7 +117,7 @@ const AnalysisCategoryChart: React.FC = () => {
       text: "카테고리 별 지출",
       align: "left",
       style: {
-        fontSize: "24px",
+        fontSize: "22px",
         fontWeight: "bold",
       },
     },
@@ -153,7 +153,7 @@ const AnalysisCategoryChart: React.FC = () => {
             series={[{ name: "Expenditure", data: expenditureSeries }]}
             type="radar"
             width="100%"
-            height="100%"
+            height="105%"
           />
         </Card>
       </Wrapper>
