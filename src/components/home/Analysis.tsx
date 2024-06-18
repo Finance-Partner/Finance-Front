@@ -83,17 +83,33 @@ const Analysis: React.FC = () => {
   }, [flId, token]);
 
   useEffect(() => {
-    const oneMonthAgo = dayjs().subtract(1, "month");
+    const oneMonthAgo = dayjs().subtract(30, "days");
     const filteredData = data.filter((transaction) =>
       dayjs(transaction.date).isAfter(oneMonthAgo)
     );
 
-    const incomeData = filteredData
-      .filter((transaction) => transaction.isIncome === "INCOME")
-      .map((transaction) => ({ x: transaction.date, y: transaction.amount }));
-    const expenditureData = filteredData
-      .filter((transaction) => transaction.isIncome === "EXPENDITURE")
-      .map((transaction) => ({ x: transaction.date, y: transaction.amount }));
+    const aggregateData = (transactions: Transaction[]) => {
+      const aggregated: { [key: string]: number } = {};
+      transactions.forEach((transaction) => {
+        if (aggregated[transaction.date]) {
+          aggregated[transaction.date] += transaction.amount;
+        } else {
+          aggregated[transaction.date] = transaction.amount;
+        }
+      });
+      return Object.keys(aggregated).map((date) => ({
+        x: date,
+        y: aggregated[date],
+      }));
+    };
+
+    const incomeData = aggregateData(
+      filteredData.filter((transaction) => transaction.isIncome === "INCOME")
+    ).sort((a, b) => dayjs(a.x).diff(dayjs(b.x)));
+
+    const expenditureData = aggregateData(
+      filteredData.filter((transaction) => transaction.isIncome === "EXPENDITURE")
+    ).sort((a, b) => dayjs(a.x).diff(dayjs(b.x)));
 
     const netData: { x: string; y: number }[] = [];
     const allDates = Array.from(
@@ -115,6 +131,8 @@ const Analysis: React.FC = () => {
         y: totalIncomeForDate - totalExpenditureForDate,
       });
     });
+
+    netData.sort((a, b) => dayjs(a.x).diff(dayjs(b.x)));
 
     setIncomeSeries(incomeData);
     setExpenditureSeries(expenditureData);
