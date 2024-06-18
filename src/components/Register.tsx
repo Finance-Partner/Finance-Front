@@ -44,7 +44,7 @@ const Container = styled.div`
   height: 100%;
   padding-left: 30px;
   ${media.tablet`width: 100%; height: auto; padding-left: 0; padding: 20px;`}
-  ${media.phone`width: 100%; padding: 10px;`}
+  ${media.phone`width: 100%; padding: 10px;border-right: none;`}
 `;
 
 const Form = styled.form`
@@ -242,7 +242,7 @@ const Register = () => {
               alt=""
               style={{ marginRight: "10px", width: "100px" }}
             />
-            <p style={{ fontSize: "50px" }}>MOAYO</p>
+            <p style={{ fontSize: "50px", fontWeight: "bold" }}>MOAYO</p>
           </h1>
         </Container>
         <Container
@@ -250,7 +250,6 @@ const Register = () => {
             paddingTop: "6vh",
             paddingLeft: "5vw",
             paddingRight: "2vw",
-            borderLeft: "1px solid black",
           }}
         >
           <div>
