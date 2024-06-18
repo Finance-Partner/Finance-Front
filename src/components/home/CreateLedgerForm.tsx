@@ -87,7 +87,6 @@ const CreateLedgerForm:React.FC<CreateLedgerFormProps> = ({ getUserInfo, setShow
         required
       />
       <AddButton type="submit">가계부 생성</AddButton>
-      <EditButton onClick={() => setShowModal(false)}>닫기</EditButton>
     </FormContainer>
   );
 };

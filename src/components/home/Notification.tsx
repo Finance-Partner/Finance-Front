@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { invitedListsState, selectedLedgerState } from "../../atom";
 import axios from "axios";
+import logo from "../../img/moayoLogo2.png";
 
 const NotificationContainer = styled.div`
   position: relative;
@@ -91,15 +92,44 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 300px;
+  width: 400px;
   text-align: center;
 `;
 
-const Button = styled.button`
-  margin: 10px;
-  padding: 10px 20px;
+const FlName = styled.span`
+  color: #7763F4;
+`
+
+const InvitedContent = styled.p`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+`
+
+const AcceptButton = styled.button`
+  margin-right: 10px;
+  padding: 10px;
   font-size: 14px;
+  background-color: #7763f4;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  width: 100%;
+`;
+
+const DeclareButton = styled.button`
+  margin-left: 10px;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
 `;
 
 interface NotificationProps {
@@ -223,9 +253,13 @@ const Notification: React.FC<NotificationProps> = ({ getUserInfo }) => {
       </NotificationContainer>
       <ModalOverlay show={showModal}>
         <ModalContent>
-          <p>{selectedNotification?.name} 가계부에 초대되었습니다.</p>
-          <Button onClick={handleAccept}>수락</Button>
-          <Button onClick={handleReject}>거절</Button>
+          <img src={logo} width="100" style={{marginBottom: "15px"}}></img>
+          <InvitedContent> <FlName>{selectedNotification?.name}</FlName> 가계부에 초대되었습니다.</InvitedContent>
+          <ButtonContainer>
+            <AcceptButton onClick={handleAccept}>수락</AcceptButton>
+            <DeclareButton onClick={handleReject}>거절</DeclareButton>
+          </ButtonContainer>
+
         </ModalContent>
       </ModalOverlay>
     </>

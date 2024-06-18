@@ -4,11 +4,12 @@ import styled from "styled-components";
 import { selectedLedgerState } from "../../atom";
 import { useState } from "react";
 import axios from "axios";
-import basicUserImg from "../../img/basicUserImage.png";
-import { error } from "console";
+import basicUserImg from "../../img/basicUserImg.png";
 
 const ModalTitle = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 const Input = styled.input`
@@ -16,11 +17,13 @@ const Input = styled.input`
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 80%; /* Adjust width based on button width */
   -webkit-appearance: none; /* Remove number input arrow on Chrome/Safari */
   -moz-appearance: textfield; /* Remove number input arrow on Firefox */
 `;
 
 const AddButton = styled.button`
+  width: 20%;
   padding: 10px;
   font-size: 14px;
   background-color: #7763f4;
@@ -28,12 +31,13 @@ const AddButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 10px;
 `;
 
 const MemberTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 5px;
 `;
 
 const Thead = styled.thead`
@@ -52,9 +56,44 @@ const Tr = styled.tr`
 `;
 
 const Td = styled.td`
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+
+  align-items: center;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle; /* Vertical align center */
+`;
+
+const SearchedUserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-top: 10px;
+`;
+
+const SearchedUserImg = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+
+const NoResultMessage = styled.div`
+  margin-top: 10px;
+  color: red;
+  font-weight: bold;
+`;
+
+const CurrentMembersTitle = styled.h3`
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 interface TeammateInfo {
@@ -73,15 +112,26 @@ interface EditLedgerFormProps {
   showModal: boolean;
   modalType: string;
   flUserInfo: TeammateInfo[];
+  isSearch: boolean;
+  searchUser: SearchedUserInfo | null;
+  setIsSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearchUser: React.Dispatch<React.SetStateAction<SearchedUserInfo | null>>;
 }
 
-
-const InviteUserForm:React.FC<EditLedgerFormProps> = ({showModal, modalType, flUserInfo}) => {
+const InviteUserForm: React.FC<EditLedgerFormProps> = ({
+  showModal,
+  modalType,
+  flUserInfo,
+  isSearch,
+  searchUser,
+  setIsSearch,
+  setSearchUser,
+}) => {
   // 유저 초대 관련 상태
   const [inputEmail, setInputEmail] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
   const [fl, setFl] = useRecoilState(selectedLedgerState);
-  const [searchUser, setSearchUser] = useState<SearchedUserInfo | null>();
+
   const [members, setMembers] = useState<TeammateInfo[]>(flUserInfo);
   const token = localStorage.getItem("token");
 
@@ -113,25 +163,23 @@ const InviteUserForm:React.FC<EditLedgerFormProps> = ({showModal, modalType, flU
   const handleSearch = async () => {
     setSearchUser(null);
     try {
-      const response = await axios.get(
-        `http://43.201.7.157:8080/emailtoname`,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            email: inputEmail,
-          },
-        }
-      );
-      
+      const response = await axios.get(`http://43.201.7.157:8080/emailtoname`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          email: inputEmail,
+        },
+      });
+
       // Assuming the response contains the new member info
       setSearchUser(response.data);
+      setIsSearch(true);
       setInviteEmail(inputEmail);
       setInputEmail("");
     } catch (error) {
-      console.error("Error inviting member:", error);
+      console.error("Error searching member:", error);
     }
   };
 
@@ -141,7 +189,7 @@ const InviteUserForm:React.FC<EditLedgerFormProps> = ({showModal, modalType, flU
         멤버 초대하기 - "{fl.name}" 가계부
         <hr />
       </ModalTitle>
-      <div>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <Input
           type="email"
           value={inputEmail}
@@ -152,54 +200,42 @@ const InviteUserForm:React.FC<EditLedgerFormProps> = ({showModal, modalType, flU
       </div>
       <div>
         {searchUser ? (
-          <>
-            <MemberTable>
-                <Tr>
-                  <Td>
-                    <img style={{width: "50px", borderRadius: "50%"}} src={searchUser.photo ? searchUser.photo : basicUserImg} alt="유저사진" />
-                  </Td>
-                  <Td>
-                    {searchUser.name}
-                  </Td>
-                  <Td>
-                    <AddButton onClick={handleInvite}>초대</AddButton>
-                  </Td>
-                </Tr>
-
-            </MemberTable>
-          </>
+          <SearchedUserContainer>
+            <SearchedUserImg
+              src={searchUser.photo ? searchUser.photo : basicUserImg}
+              alt="유저사진"
+            />
+            <span>{searchUser.name}</span>
+            <AddButton onClick={handleInvite} style={{ marginLeft: "auto" }}>
+              초대
+            </AddButton>
+          </SearchedUserContainer>
         ) : (
-          <>
-            검색 결과가 없습니다!
-          </>
+          isSearch && <NoResultMessage>검색 결과가 없습니다!</NoResultMessage>
         )}
       </div>
       <hr />
-      <h3>현재 멤버</h3>
+      <CurrentMembersTitle>현재 멤버</CurrentMembersTitle>
+      <hr />
       <MemberTable>
-      <Thead>
-          <Tr>
-            <Th>이름</Th>
-            <Th>사진</Th>
-            <Th>역할</Th>
-          </Tr>
-        </Thead>
         <tbody>
           {flUserInfo.map((member) => (
             <Tr key={member.userId}>
+              <Td>
+                <img
+                  src={member.photo ? member.photo : basicUserImg}
+                  alt={member.name}
+                  width="20"
+                  height="20"
+                  style={{ borderRadius: "50%" }}
+                />
+              </Td>
               <Td>{member.name}</Td>
-              <Td>
-                <img src={member.photo ? member.photo : basicUserImg} alt={member.name} width="50" height="50" style={{ borderRadius: "50%" }} />
-              </Td>
-              <Td>
-                {member.head ? "방장" : "파티원"}
-              </Td>
+              <Td>{member.head ? "방장" : "파티원"}</Td>
             </Tr>
           ))}
         </tbody>
       </MemberTable>
-      
-
     </>
   );
 };

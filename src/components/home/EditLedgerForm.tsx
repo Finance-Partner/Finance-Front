@@ -4,36 +4,6 @@ import axios from "axios";
 import { Ledger, myManageFlListsState } from "../../atom";
 import { useRecoilState } from "recoil";
 
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-// const Input = styled.input`
-//   padding: 10px;
-//   font-size: 14px;
-//   border: 1px solid #ccc;
-//   border-radius: 5px;
-// `;
-
-const AddButton = styled.button`
-  padding: 10px;
-  font-size: 14px;
-  background-color: #7763f4;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const EditButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 14px;
-  cursor: pointer;
-`;
-
 const Container = styled.div`
   padding: 20px;
 `;
@@ -44,12 +14,26 @@ const Table = styled.table`
 `;
 
 const Thead = styled.thead`
-  background-color: #f5f5f5;
+  border-bottom: 2px solid #ddd;
 `;
 
 const Th = styled.th`
   padding: 10px;
-  border: 1px solid #ddd;
+  text-align: left;
+  &:nth-child(1) {
+    width: 10%;
+  }
+  &:nth-child(2) {
+    width: 50%;
+  }
+  &:nth-child(3) {
+    text-align:center;
+    width: 20%;
+  }
+  &:nth-child(4) {
+    text-align:center;
+    width: 20%;
+  }
 `;
 
 const Tr = styled.tr`
@@ -60,16 +44,16 @@ const Tr = styled.tr`
 
 const Td = styled.td`
   padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
+  text-align: left;
 `;
+
 
 const Input = styled.input`
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 80%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
 `;
 
 const Button = styled.button<{ color?: string }>`
@@ -155,14 +139,18 @@ const EditLedgerForm:React.FC<EditLedgerFormProps> = ({ getUserInfo, setShowModa
       <Table>
         <Thead>
           <Tr>
+            <Th></Th>
             <Th>이름</Th>
             <Th>수정</Th>
             <Th>삭제</Th>
           </Tr>
         </Thead>
         <tbody>
-          {myManageFlLists.map((fl) => (
+          {myManageFlLists.map((fl, index) => (
             <Tr key={fl.id}>
+              <Td>
+                {index + 1}
+              </Td>
               <Td>
                 {editFlId === fl.id ? (
                   <Input

@@ -11,7 +11,7 @@ const NavBar = styled.nav`
   height: 10%;
 `;
 const NavTitle = styled.h1`
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
   padding-top: 5px;
 `;
@@ -96,10 +96,11 @@ const Main = () => {
           <NavTitleLogo>
             <img src={logo} alt="asdasd" style={{width: "100px"}} />
           </NavTitleLogo>
-{/* 
+
+
           <NavTitle>
             MOAYO
-          </NavTitle> */}
+          </NavTitle>
         </div>
         <div>
           <LoginBtn onClick={() => navigate("/auth/login")}>로그인</LoginBtn>
@@ -148,7 +149,7 @@ const Main = () => {
               textAlign: "center",
             }}
           >
-            Finance Partner에서
+            모아요에서
             <br /> 다양한 사람들과 가계부를 작성해보세요.
           </h3>
           <div

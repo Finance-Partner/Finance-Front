@@ -121,6 +121,8 @@ const SubmitForm: React.FC<SubmitFormProps> = ({date, onFormSubmit}) => {
     }));
   }, [date]);
 
+  
+
   // 라디오 버튼 클릭 시 상태 업데이트
   const handleTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, type: e.target.value });

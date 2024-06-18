@@ -40,6 +40,7 @@ const SubmitBtn = styled.button`
 `;
 
 const AddButton = styled.button`
+  width: 100%;
   padding: 10px;
   font-size: 14px;
   background-color: #7763f4;
@@ -83,8 +84,16 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.h2`
-  margin-bottom: 20px;
+  padding: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
 `;
+
+const ModalAlert = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+`
 
 const EditButton = styled.button`
   margin-top: 20px;
@@ -103,7 +112,12 @@ interface TeammateInfo {
   name: string;
   photo: string;
   head: boolean;
-}
+};
+
+interface SearchedUserInfo {
+  name: string;
+  photo: string;
+};
 
 const HouseHolder = () => {
   const navigate = useNavigate();
@@ -125,8 +139,20 @@ const HouseHolder = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [fl, setFl] = useRecoilState(selectedLedgerState);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchUser, setSearchUser] = useState<SearchedUserInfo | null>(null);
 
   const [isMyManageFlList, setIsMyManageFlList] = useState<boolean>(false);
+
+  const handleOverlayClick = () => {
+    setShowModal(false);
+    setIsSearch(false);
+    setSearchUser(null);
+  };
+
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   const getUserInfo = () => {
     if (token) {
@@ -142,7 +168,7 @@ const HouseHolder = () => {
           setMyFlLists(data.myFlLists);
           setMyManageFlLists(data.myManageFlLists);
           setInvitedLists(data.invitedLists);
-          if (myFlLists.length > 0) {
+          if (data.myFlLists.length > 0) {
             setSelectedLedger(data.myFlLists[0]);
           }
           setUserInfo({
@@ -178,7 +204,9 @@ const HouseHolder = () => {
       }
     };
 
-    fetchTeamData();
+    if (fl) {
+      fetchTeamData();
+    }
   }, [fl]);
 
   useEffect(() => {
@@ -241,30 +269,6 @@ const HouseHolder = () => {
             }}
           >
             <div style={{display: "flex" }}>
-              {isMyManageFlList ? (
-                <div
-                  style={{ marginRight: "15px", cursor: "pointer" }}
-                  onClick={() => {
-                    setShowModal(true);
-                    setModalType("leaveFl");
-                  }}
-                >
-                  <p
-                    style={{
-                      width: "100%",
-                      textAlign: "center",
-                      color: "#7B7F85",
-                      fontSize: "32px",
-                    }}
-                    className="material-symbols-outlined"
-                  >
-                    close
-                  </p>
-                </div>
-              ) : (
-                <></>
-              )}
-
               <div
                 style={{ marginRight: "15px", cursor: "pointer" }}
                 onClick={() => {
@@ -317,35 +321,31 @@ const HouseHolder = () => {
       <OutletContainer>
         <Outlet />
       </OutletContainer>
-      <ModalOverlay show={showModal}>
+      <ModalOverlay show={showModal} onClick={handleOverlayClick}>
         {modalType === "invite" && (
-          <ModalContent>
+          <ModalContent onClick={handleContentClick}>
             <InviteUserForm
               showModal={showModal}
               modalType={modalType}
               flUserInfo={flUserInfo}
+              isSearch={isSearch}
+              searchUser={searchUser}
+              setIsSearch={setIsSearch}
+              setSearchUser={setSearchUser}
             />
           </ModalContent>
         )}
         {modalType === "leaveFl" && (
-          <ModalContent>
+          <ModalContent onClick={handleContentClick}>
             {isMyManageFlList ? (
               <>
                 <LeaveContainer>
                   <img src={logo} width="100"></img>
                   <ModalTitle>
                     가계부에서 나가시겠습니까?
-                    <br />
-                    *방장이 나갈 경우 가계부가 삭제됩니다*
                   </ModalTitle>
+                  <ModalAlert>* 방장이 나갈 경우 가계부가 삭제됩니다 *</ModalAlert>
                   <div style={{ display: "flex" }}>
-                    <EditButton
-                      onClick={() => {
-                        setShowModal(false);
-                      }}
-                    >
-                      닫기
-                    </EditButton>
                     <AddButton
                       onClick={() => {
                         handleLeaveFl();
@@ -363,13 +363,6 @@ const HouseHolder = () => {
                   <img src={logo} width="100"></img>
                   <ModalTitle>가계부에서 나가시겠습니까?</ModalTitle>
                   <div style={{ display: "flex" }}>
-                    <EditButton
-                      onClick={() => {
-                        setShowModal(false);
-                      }}
-                    >
-                      닫기
-                    </EditButton>
                     <AddButton
                       onClick={() => {
                         setShowModal(false);
