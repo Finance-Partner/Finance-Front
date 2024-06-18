@@ -25,12 +25,23 @@ const Title = styled.h2`
 const FixedList = styled.div`
   flex-grow: 1;
   overflow-y: auto;
+  max-height: 250px;
   margin-bottom: 20px;
+
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 const FixedItem = styled.div`
   display: flex;
   align-items: center;
+
   margin-bottom: 15px;
 `;
 
@@ -92,7 +103,7 @@ const ModalOverlay = styled.div<{ show: boolean }>`
 
 const ModalContent = styled.div`
   background-color: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 10px;
   width: 400px;
   max-height: 80%;
@@ -103,30 +114,50 @@ const ModalTitle = styled.h2`
   margin-bottom: 20px;
 `;
 
+const Label = styled.label`
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+`;
+
+const Select = styled.select`
+  width: 25%;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: 1px none #ccc;
+  border-radius: 5px;
+`;
+
 const Input = styled.input`
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
 `;
 
 const FormRow = styled.div`
   display: flex;
+  margin-bottom: 10px;
+`;
+
+const ToggleButtonGroup = styled.div`
+  display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+`;
 
-  & > * {
-    width: 48%;
-  }
+const ToggleButton = styled.button<{ active: boolean }>`
+  width: 48%;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${({ active }) => (active ? "white" : "#7763f4")};
+  background-color: ${({ active }) => (active ? "#7763f4" : "white")};
+  border: 1px solid #7763f4;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 const ModalButton = styled.button`
@@ -159,6 +190,14 @@ const FixedDetails: React.FC = () => {
   const [newAmount, setNewAmount] = useState("");
   const [newDate, setNewDate] = useState("");
   const [isIncome, setIsIncome] = useState(false);
+
+  const handleOverlayClick = () => {
+    setShowModal(false);
+  };
+
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   useEffect(() => {
     const fetchFixedInfo = async () => {
@@ -240,38 +279,41 @@ const FixedDetails: React.FC = () => {
         </FixedList>
         <Button onClick={() => setShowModal(true)}>고정 내역 수정하기</Button>
       </Wrapper>
-      <ModalOverlay show={showModal}>
-        <ModalContent>
-          <ModalTitle>고정 지출 / 수입 추가</ModalTitle>
+      <ModalOverlay show={showModal} onClick={handleOverlayClick}>
+        <ModalContent onClick={handleContentClick}>
+          <FormRow>
+            <Label>매월</Label>
+            <Select
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+            >
+              {[...Array(31)].map((_, i) => (
+                <option key={i} value={i + 1}>
+                  {i + 1}일
+                </option>
+              ))}
+            </Select>
+          </FormRow>
+          <Input
+            type="number"
+            placeholder="금액"
+            value={newAmount}
+            onChange={(e) => setNewAmount(e.target.value)}
+          />
+          <ToggleButtonGroup>
+            <ToggleButton active={!isIncome} onClick={() => setIsIncome(false)}>
+              지출
+            </ToggleButton>
+            <ToggleButton active={isIncome} onClick={() => setIsIncome(true)}>
+              수입
+            </ToggleButton>
+          </ToggleButtonGroup>
           <Input
             type="text"
-            placeholder="내용"
+            placeholder="메모"
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
           />
-          <FormRow>
-            <Input
-              type="number"
-              placeholder="금액"
-              value={newAmount}
-              onChange={(e) => setNewAmount(e.target.value)}
-            />
-            <Input
-              type="number"
-              placeholder="날짜"
-              value={newDate}
-              onChange={(e) => setNewDate(e.target.value)}
-            />
-          </FormRow>
-          <FormRow>
-            <Select
-              value={isIncome.toString()}
-              onChange={(e) => setIsIncome(e.target.value === "true")}
-            >
-              <option value="false">지출</option>
-              <option value="true">수입</option>
-            </Select>
-          </FormRow>
           <ModalButton onClick={handleAddFixedInfo}>추가</ModalButton>
         </ModalContent>
       </ModalOverlay>
